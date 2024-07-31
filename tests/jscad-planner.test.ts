@@ -4,8 +4,8 @@ import { executeJscadOperations } from "../lib/execute-jscad-operations.ts"
 
 it("should be able to create operations, then execute the operations against the jscad planner", () => {
   const operations1 = jscadPlanner.booleans.intersect(
-    jscadPlanner.primitives.cube({ size: 10, center: true }),
-    jscadPlanner.primitives.sphere({ radius: 10, center: true }),
+    jscadPlanner.primitives.cube({ size: 10, center: [0, 0, 0] }),
+    jscadPlanner.primitives.sphere({ radius: 10, center: [0, 0, 0] }),
   )
 
   expect(operations1).toEqual({
