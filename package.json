@@ -1,8 +1,13 @@
 {
   "name": "jscad-planner",
+  "version": "0.0.1",
   "module": "index.ts",
+  "scripts": {
+    "build": "tsup ./lib/index.ts --dts --sourcemap"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "tsup": "^8.2.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
