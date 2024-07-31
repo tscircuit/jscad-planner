@@ -14,12 +14,12 @@ it("should be able to create operations, then execute the operations against the
       {
         type: "cube",
         size: 10,
-        center: true,
+        center: [0, 0, 0],
       },
       {
         type: "sphere",
         radius: 10,
-        center: true,
+        center: [0, 0, 0],
       },
     ],
   })

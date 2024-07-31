@@ -12,17 +12,17 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   primitives: {
     cube: (options?: {
       size?: number | number[]
-      center?: boolean
+      center?: Vector3D
     }) => ShapeOrOp
     sphere: (options?: {
       radius?: number
-      center?: boolean
+      center?: Vector3D
       resolution?: number
     }) => ShapeOrOp
     cylinder: (options?: {
       radius?: number
       height?: number
-      center?: boolean
+      center?: Vector3D
       resolution?: number
     }) => ShapeOrOp
   }

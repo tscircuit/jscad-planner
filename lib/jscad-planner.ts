@@ -32,14 +32,14 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
     primitives: {
       cube: (options?: {
         size?: number | number[]
-        center?: boolean
+        center?: Vector3D
       }): JscadOperation => ({
         type: "cube",
         ...options,
       }),
       sphere: (options?: {
         radius?: number
-        center?: boolean
+        center?: Vector3D
         resolution?: number
       }): JscadOperation => ({
         type: "sphere",
@@ -48,7 +48,7 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
       cylinder: (options?: {
         radius?: number
         height?: number
-        center?: boolean
+        center?: Vector3D
         resolution?: number
       }): JscadOperation => ({
         type: "cylinder",

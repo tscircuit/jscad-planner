@@ -34,13 +34,13 @@ export interface ColorizeOperation extends OperationBase {
 export interface CubeOperation extends OperationBase {
   type: "cube"
   size?: number | number[]
-  center?: boolean
+  center?: Vector3D
 }
 
 export interface SphereOperation extends OperationBase {
   type: "sphere"
   radius?: number
-  center?: boolean
+  center?: Vector3D
   resolution?: number
 }
 
@@ -48,7 +48,7 @@ export interface CylinderOperation extends OperationBase {
   type: "cylinder"
   radius?: number
   height?: number
-  center?: boolean
+  center?: Vector3D
   resolution?: number
 }
 
