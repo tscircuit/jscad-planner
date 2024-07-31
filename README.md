@@ -21,7 +21,7 @@ Here's a basic example of how to use jscad-planner:
 
 ```typescript
 import { jscadPlanner, executeJscadOperations } from "jscad-planner"
-import jscad from "jscad"
+import jscad from "@jscad/modeling"
 
 // Create a JSCAD plan
 const plan = jscadPlanner.booleans.intersect(
