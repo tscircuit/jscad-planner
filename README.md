@@ -25,7 +25,7 @@ import jscad from "@jscad/modeling"
 
 // Create a JSCAD plan
 const plan = jscadPlanner.booleans.intersect(
-  jscadPlanner.primitives.cube({ size: 10, center: [0, 0, 0] }),
+  jscadPlanner.primitives.cube({ size: 10, center: [10, 0, 0] }),
   jscadPlanner.primitives.sphere({ radius: 10, center: [0, 0, 0] })
 )
 
