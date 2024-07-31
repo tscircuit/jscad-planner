@@ -1,5 +1,10 @@
 import type { JscadImplementation } from "./jscad-implementation-types"
-import type { JscadOperation } from "./jscad-operations-types"
+import type {
+  CubeOperation,
+  CylinderOperation,
+  JscadOperation,
+  SphereOperation,
+} from "./jscad-operations-types"
 
 export const executeJscadOperations = (
   jscad: JscadImplementation,
@@ -7,7 +12,9 @@ export const executeJscadOperations = (
 ) => {
   const recurse = (op: JscadOperation) => executeJscadOperations(jscad, op)
 
-  switch (operation.type) {
+  const { type, ...params } = operation
+
+  switch (type) {
     case "intersect":
       return jscad.booleans.intersect(...operation.shapes.map(recurse))
     case "subtract":
@@ -17,16 +24,11 @@ export const executeJscadOperations = (
     case "colorize":
       return jscad.colors.colorize(operation.color, recurse(operation.shape))
     case "cube":
-      return jscad.primitives.cube({ size: operation.size })
+      return jscad.primitives.cube(params as CubeOperation)
     case "sphere":
-      return jscad.primitives.sphere({ radius: operation.radius })
+      return jscad.primitives.sphere(params as SphereOperation)
     case "cylinder":
-      return jscad.primitives.cylinder({
-        radius: operation.radius,
-        height: operation.height,
-        center: operation.center,
-        resolution: operation.resolution,
-      })
+      return jscad.primitives.cylinder(params as CylinderOperation)
     case "rotate":
       return jscad.transformations.rotate(
         operation.angles,
