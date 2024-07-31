@@ -1,11 +1,11 @@
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type { JscadOperation } from "./jscad-operations-types"
 
-export const getJscadFromOperation = (
+export const executeJscadOperations = (
   jscad: JscadImplementation,
   operation: JscadOperation,
 ) => {
-  const recurse = (op: JscadOperation) => getJscadFromOperation(jscad, op)
+  const recurse = (op: JscadOperation) => executeJscadOperations(jscad, op)
 
   switch (operation.type) {
     case "intersect":
