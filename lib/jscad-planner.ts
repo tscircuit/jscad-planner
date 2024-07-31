@@ -113,28 +113,23 @@ export const jscadPlanner: JscadImplementation = {
       }),
     },
   },
+
+  // TODO we might support measurements for jscadPlanner in the future,
+  // if this returned operations, the operations could be executed with
+  // executeJscadOperations
   measurements: {
-    measureBoundingBox: (shape: JscadOperation): JscadOperation => ({
-      type: "measureBoundingBox",
-      shape,
-    }),
-    measureArea: (shape: JscadOperation): JscadOperation => ({
-      type: "measureArea",
-      shape,
-    }),
-    measureVolume: (shape: JscadOperation): JscadOperation => ({
-      type: "measureVolume",
-      shape,
-    }),
+    measureBoundingBox: (shape: JscadOperation) => {
+      throw new Error("measureVolume is not yet supported with jscad-planner")
+    },
+    measureArea: (shape: JscadOperation) => {
+      throw new Error("measureVolume is not yet supported with jscad-planner")
+    },
+    measureVolume: (shape: JscadOperation) => {
+      throw new Error("measureVolume is not yet supported with jscad-planner")
+    },
   },
   utils: {
-    degToRad: (degrees: number): JscadOperation => ({
-      type: "degToRad",
-      degrees,
-    }),
-    radToDeg: (radians: number): JscadOperation => ({
-      type: "radToDeg",
-      radians,
-    }),
+    degToRad: (degrees: number) => (degrees * Math.PI) / 180,
+    radToDeg: (radians: number) => (radians * 180) / Math.PI,
   },
 }
