@@ -6,10 +6,10 @@ import type {
   SphereOperation,
 } from "./jscad-operations-types"
 
-export const executeJscadOperations = (
-  jscad: JscadImplementation,
+export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
+  jscad: JscadImplementation<ShapeOrOp, MeasurementT>,
   operation: JscadOperation,
-) => {
+): any => {
   const recurse = (op: JscadOperation) => executeJscadOperations(jscad, op)
 
   const { type, ...params } = operation

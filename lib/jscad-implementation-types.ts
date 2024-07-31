@@ -1,6 +1,6 @@
-import type { Color, Vector2D } from "./jscad-operations-types"
+import type { Color, Vector2D, Vector3D } from "./jscad-operations-types"
 
-export interface JscadImplementation<ShapeOrOp = any> {
+export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   booleans: {
     intersect: (...geometries: ShapeOrOp[]) => ShapeOrOp
     subtract: (...geometries: ShapeOrOp[]) => ShapeOrOp
@@ -34,13 +34,17 @@ export interface JscadImplementation<ShapeOrOp = any> {
   extrusions: {
     extrudeLinear: (
       options: {
-        // TODO
+        height: number
+        twistAngle?: number
+        twistSteps?: number
       },
       geometry: ShapeOrOp,
     ) => ShapeOrOp
     extrudeRotate: (
       options: {
-        // TODO
+        angle?: number
+        startAngle?: number
+        segments?: number
       },
       geometry: ShapeOrOp,
     ) => ShapeOrOp
@@ -60,20 +64,18 @@ export interface JscadImplementation<ShapeOrOp = any> {
       create: (points: Vector2D[]) => ShapeOrOp
     }
     geom3: {
-      // TODO add proper type
-      create: (polygons: any[]) => ShapeOrOp
+      create: (polygons: Vector3D[][]) => ShapeOrOp
     }
     path2: {
       create: (points: Vector2D[]) => ShapeOrOp
     }
   }
-  // TODO we might support measurements for jscadPlanner in the future,
-  // if this returned operations, the operations could be executed with
-  // executeJscadOperations
   measurements: {
-    measureBoundingBox: (geometry: ShapeOrOp) => number[][]
-    measureArea: (geometry: ShapeOrOp) => number
-    measureVolume: (geometry: ShapeOrOp) => number
+    measureBoundingBox: (
+      geometry: ShapeOrOp,
+    ) => MeasurementT extends number ? number[][] : MeasurementT
+    measureArea: (geometry: ShapeOrOp) => MeasurementT
+    measureVolume: (geometry: ShapeOrOp) => MeasurementT
   }
   utils: {
     degToRad: (degrees: number) => number

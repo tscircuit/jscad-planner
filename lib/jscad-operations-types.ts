@@ -74,13 +74,21 @@ export interface TranslateOperation extends OperationBase {
 // Extrusion operations
 export interface ExtrudeLinearOperation extends OperationBase {
   type: "extrudeLinear"
-  options: any
+  options: {
+    height: number
+    twistAngle?: number
+    twistSteps?: number
+  }
   shape: JscadOperation
 }
 
 export interface ExtrudeRotateOperation extends OperationBase {
   type: "extrudeRotate"
-  options: any
+  options: {
+    angle?: number
+    startAngle?: number
+    segments?: number
+  }
   shape: JscadOperation
 }
 
