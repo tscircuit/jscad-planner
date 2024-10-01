@@ -152,6 +152,13 @@ export interface CuboidOperation extends OperationBase {
   size: [number, number, number]
 }
 
+export interface RoundedCuboidOperation extends OperationBase {
+  type: "roundedCuboid"
+  size: [number, number, number]
+  roundRadius: number
+  segments?: number
+}
+
 export type JscadOperation =
   | IntersectOperation
   | SubtractOperation
@@ -175,3 +182,4 @@ export type JscadOperation =
   | DegToRadOperation
   | RadToDegOperation
   | CuboidOperation
+  | RoundedCuboidOperation

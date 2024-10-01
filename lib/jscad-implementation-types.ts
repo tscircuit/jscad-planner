@@ -30,6 +30,11 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
       paths?: number[] | number[][]
     }) => ShapeOrOp
     cuboid: (options: { size: [number, number, number] }) => ShapeOrOp
+    roundedCuboid: (options: {
+      size: [number, number, number]
+      roundRadius: number
+      segments?: number
+    }) => ShapeOrOp
   }
   transforms: {
     rotate: (angles: number[], geometry: ShapeOrOp) => ShapeOrOp

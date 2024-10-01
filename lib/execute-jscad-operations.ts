@@ -6,6 +6,7 @@ import type {
   SphereOperation,
   PolygonOperation,
   CuboidOperation,
+  RoundedCuboidOperation,
 } from "./jscad-operations-types"
 
 export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
@@ -35,6 +36,8 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
       return jscad.primitives.polygon(params as PolygonOperation)
     case "cuboid":
       return jscad.primitives.cuboid(params as CuboidOperation)
+    case "roundedCuboid":
+      return jscad.primitives.roundedCuboid(params as RoundedCuboidOperation)
     case "rotate":
       return jscad.transforms.rotate(
         operation.angles,

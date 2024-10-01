@@ -65,6 +65,14 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         type: "cuboid",
         ...options,
       }),
+      roundedCuboid: (options: {
+        size: [number, number, number]
+        roundRadius: number
+        segments?: number
+      }): JscadOperation => ({
+        type: "roundedCuboid",
+        ...options,
+      }),
     },
     transforms: {
       rotate: (angles: number[], shape: JscadOperation): JscadOperation => ({
