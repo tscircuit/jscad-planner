@@ -58,6 +58,12 @@ export interface PolygonOperation extends OperationBase {
   paths?: number[] | number[][]
 }
 
+export interface PolygonOperation extends OperationBase {
+  type: "polygon"
+  points: Vector2D[] | Vector2D[][]
+  paths?: number[] | number[][]
+}
+
 // Transformation operations
 export interface RotateOperation extends OperationBase {
   type: "rotate"
@@ -154,6 +160,7 @@ export type JscadOperation =
   | CubeOperation
   | SphereOperation
   | CylinderOperation
+  | PolygonOperation
   | RotateOperation
   | ScaleOperation
   | TranslateOperation

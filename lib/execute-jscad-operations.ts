@@ -4,6 +4,8 @@ import type {
   CylinderOperation,
   JscadOperation,
   SphereOperation,
+  PolygonOperation,
+  CuboidOperation,
 } from "./jscad-operations-types"
 
 export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
