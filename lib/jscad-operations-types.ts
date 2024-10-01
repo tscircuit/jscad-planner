@@ -141,6 +141,11 @@ export interface RadToDegOperation extends OperationBase {
   radians: number
 }
 
+export interface CuboidOperation extends OperationBase {
+  type: "cuboid"
+  size: [number, number, number]
+}
+
 export type JscadOperation =
   | IntersectOperation
   | SubtractOperation
@@ -162,3 +167,4 @@ export type JscadOperation =
   | MeasureVolumeOperation
   | DegToRadOperation
   | RadToDegOperation
+  | CuboidOperation

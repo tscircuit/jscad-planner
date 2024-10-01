@@ -61,6 +61,10 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         type: "polygon",
         ...options,
       }),
+      cuboid: (options: { size: [number, number, number] }): JscadOperation => ({
+        type: "cuboid",
+        ...options,
+      }),
     },
     transformations: {
       rotate: (angles: number[], shape: JscadOperation): JscadOperation => ({

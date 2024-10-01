@@ -29,6 +29,7 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
       points: Vector2D[] | Vector2D[][]
       paths?: number[] | number[][]
     }) => ShapeOrOp
+    cuboid: (options: { size: [number, number, number] }) => ShapeOrOp
   }
   transformations: {
     rotate: (angles: number[], geometry: ShapeOrOp) => ShapeOrOp
