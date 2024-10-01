@@ -25,6 +25,10 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
       center?: Vector3D
       resolution?: number
     }) => ShapeOrOp
+    polygon: (options: {
+      points: Vector2D[] | Vector2D[][]
+      paths?: number[] | number[][]
+    }) => ShapeOrOp
   }
   transformations: {
     rotate: (angles: number[], geometry: ShapeOrOp) => ShapeOrOp

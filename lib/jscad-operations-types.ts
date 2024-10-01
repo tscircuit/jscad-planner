@@ -52,6 +52,12 @@ export interface CylinderOperation extends OperationBase {
   resolution?: number
 }
 
+export interface PolygonOperation extends OperationBase {
+  type: "polygon"
+  points: Vector2D[] | Vector2D[][]
+  paths?: number[] | number[][]
+}
+
 // Transformation operations
 export interface RotateOperation extends OperationBase {
   type: "rotate"

@@ -10,6 +10,7 @@
     "build": "tsup ./lib/index.ts --dts --sourcemap"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.3",
     "@types/bun": "latest",
     "tsup": "^8.2.3"
   },

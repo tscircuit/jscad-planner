@@ -54,6 +54,13 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         type: "cylinder",
         ...options,
       }),
+      polygon: (options: {
+        points: Vector2D[] | Vector2D[][]
+        paths?: number[] | number[][]
+      }): JscadOperation => ({
+        type: "polygon",
+        ...options,
+      }),
     },
     transformations: {
       rotate: (angles: number[], shape: JscadOperation): JscadOperation => ({
