@@ -31,7 +31,7 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
     }) => ShapeOrOp
     cuboid: (options: { size: [number, number, number] }) => ShapeOrOp
   }
-  transformations: {
+  transforms: {
     rotate: (angles: number[], geometry: ShapeOrOp) => ShapeOrOp
     scale: (factors: number[], geometry: ShapeOrOp) => ShapeOrOp
     translate: (vector: number[], geometry: ShapeOrOp) => ShapeOrOp

@@ -66,7 +66,7 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         ...options,
       }),
     },
-    transformations: {
+    transforms: {
       rotate: (angles: number[], shape: JscadOperation): JscadOperation => ({
         type: "rotate",
         angles,

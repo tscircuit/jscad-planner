@@ -36,17 +36,17 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
     case "cuboid":
       return jscad.primitives.cuboid(params as CuboidOperation)
     case "rotate":
-      return jscad.transformations.rotate(
+      return jscad.transforms.rotate(
         operation.angles,
         recurse(operation.shape),
       )
     case "scale":
-      return jscad.transformations.scale(
+      return jscad.transforms.scale(
         operation.factors,
         recurse(operation.shape),
       )
     case "translate":
-      return jscad.transformations.translate(
+      return jscad.transforms.translate(
         operation.vector,
         recurse(operation.shape),
       )
