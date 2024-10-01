@@ -52,6 +52,18 @@ export interface CylinderOperation extends OperationBase {
   resolution?: number
 }
 
+export interface PolygonOperation extends OperationBase {
+  type: "polygon"
+  points: Vector2D[] | Vector2D[][]
+  paths?: number[] | number[][]
+}
+
+export interface PolygonOperation extends OperationBase {
+  type: "polygon"
+  points: Vector2D[] | Vector2D[][]
+  paths?: number[] | number[][]
+}
+
 // Transformation operations
 export interface RotateOperation extends OperationBase {
   type: "rotate"
@@ -135,6 +147,11 @@ export interface RadToDegOperation extends OperationBase {
   radians: number
 }
 
+export interface CuboidOperation extends OperationBase {
+  type: "cuboid"
+  size: [number, number, number]
+}
+
 export type JscadOperation =
   | IntersectOperation
   | SubtractOperation
@@ -143,6 +160,7 @@ export type JscadOperation =
   | CubeOperation
   | SphereOperation
   | CylinderOperation
+  | PolygonOperation
   | RotateOperation
   | ScaleOperation
   | TranslateOperation
@@ -156,3 +174,4 @@ export type JscadOperation =
   | MeasureVolumeOperation
   | DegToRadOperation
   | RadToDegOperation
+  | CuboidOperation
