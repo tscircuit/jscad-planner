@@ -23,6 +23,15 @@ export interface UnionOperation extends OperationBase {
   shapes: JscadOperation[]
 }
 
+export interface HullOperation extends OperationBase {
+  type: "hull"
+  shapes: JscadOperation[]
+}
+
+export interface HullChainOperation extends OperationBase {
+  type: "hullChain"
+  shapes: JscadOperation[]
+}
 // Color operation
 export interface ColorizeOperation extends OperationBase {
   type: "colorize"
@@ -163,6 +172,8 @@ export type JscadOperation =
   | IntersectOperation
   | SubtractOperation
   | UnionOperation
+  | HullOperation
+  | HullChainOperation
   | ColorizeOperation
   | CubeOperation
   | SphereOperation

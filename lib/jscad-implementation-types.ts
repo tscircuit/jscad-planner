@@ -1,10 +1,12 @@
-import type { Color, Vector2D, Vector3D } from "./jscad-operations-types"
+import type { Color, JscadOperation, Vector2D, Vector3D } from "./jscad-operations-types"
 
 export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   booleans: {
     intersect: (...geometries: ShapeOrOp[]) => ShapeOrOp
     subtract: (...geometries: ShapeOrOp[]) => ShapeOrOp
     union: (...geometries: ShapeOrOp[]) => ShapeOrOp
+    hull: (...geometries: ShapeOrOp[]) => ShapeOrOp
+    hullChain: (...geometries: ShapeOrOp[]) => ShapeOrOp
   }
   colors: {
     colorize: (color: Color, ...geometries: ShapeOrOp[]) => ShapeOrOp

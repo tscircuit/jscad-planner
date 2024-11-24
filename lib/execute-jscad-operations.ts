@@ -24,6 +24,10 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
       return jscad.booleans.subtract(...operation.shapes.map(recurse))
     case "union":
       return jscad.booleans.union(...operation.shapes.map(recurse))
+    case "hull": 
+      return jscad.booleans.hull(...operation.shapes.map(recurse))
+    case "hullChain":
+      return jscad.booleans.hullChain(...operation.shapes.map(recurse))
     case "colorize":
       return jscad.colors.colorize(operation.color, recurse(operation.shape))
     case "cube":
