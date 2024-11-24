@@ -5,6 +5,8 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
     intersect: (...geometries: ShapeOrOp[]) => ShapeOrOp
     subtract: (...geometries: ShapeOrOp[]) => ShapeOrOp
     union: (...geometries: ShapeOrOp[]) => ShapeOrOp
+    hull: (...geometries: ShapeOrOp[]) => ShapeOrOp
+    hullChain: (...geometries: ShapeOrOp[]) => ShapeOrOp
   }
   colors: {
     colorize: (color: Color, ...geometries: ShapeOrOp[]) => ShapeOrOp
