@@ -84,6 +84,11 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
     case "radToDeg":
       return jscad.utils.radToDeg(operation.radians)
     default:
-      throw new Error(`Unsupported operation type: ${(operation as any).type}`)
+      if ((operation as any).type === undefined) {
+        throw new Error(
+          `Operation type is undefined. This usually means the operation object is malformed or not properly initialized. Operation: ${JSON.stringify(operation, null, 2)}`
+        )
+      }
+      throw new Error(`Unsupported operation type: ${(operation as any).type}. Operation: ${JSON.stringify(operation, null, 2)}`)
   }
 }
