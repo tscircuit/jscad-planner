@@ -13,6 +13,11 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
   jscad: JscadImplementation<ShapeOrOp, MeasurementT>,
   operation: JscadOperation,
 ): any => {
+  if (Array.isArray(operation)) {
+    throw new Error(
+      `executeJscadOperations currently doesn't support Array<JscadOperation>, try adding a root union or or executing each element individually`,
+    )
+  }
   const recurse = (op: JscadOperation) => executeJscadOperations(jscad, op)
 
   const { type, ...params } = operation
@@ -24,7 +29,7 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
       return jscad.booleans.subtract(...operation.shapes.map(recurse))
     case "union":
       return jscad.booleans.union(...operation.shapes.map(recurse))
-    case "hull": 
+    case "hull":
       return jscad.booleans.hull(...operation.shapes.map(recurse))
     case "hullChain":
       return jscad.booleans.hullChain(...operation.shapes.map(recurse))
@@ -43,15 +48,9 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
     case "roundedCuboid":
       return jscad.primitives.roundedCuboid(params as RoundedCuboidOperation)
     case "rotate":
-      return jscad.transforms.rotate(
-        operation.angles,
-        recurse(operation.shape),
-      )
+      return jscad.transforms.rotate(operation.angles, recurse(operation.shape))
     case "scale":
-      return jscad.transforms.scale(
-        operation.factors,
-        recurse(operation.shape),
-      )
+      return jscad.transforms.scale(operation.factors, recurse(operation.shape))
     case "translate":
       return jscad.transforms.translate(
         operation.vector,
@@ -86,9 +85,11 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
     default:
       if ((operation as any).type === undefined) {
         throw new Error(
-          `Operation type is undefined. This usually means the operation object is malformed or not properly initialized. Operation: ${JSON.stringify(operation, null, 2)}`
+          `Operation type is undefined. This usually means the operation object is malformed or not properly initialized. Operation: ${JSON.stringify(operation, null, 2).slice(0, 200)}...`,
         )
       }
-      throw new Error(`Unsupported operation type: ${(operation as any).type}. Operation: ${JSON.stringify(operation, null, 2)}`)
+      throw new Error(
+        `Unsupported operation type: ${(operation as any).type}. Operation: ${JSON.stringify(operation, null, 2)}`,
+      )
   }
 }
