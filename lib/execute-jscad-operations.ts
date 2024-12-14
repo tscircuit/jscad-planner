@@ -13,6 +13,9 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
   jscad: JscadImplementation<ShapeOrOp, MeasurementT>,
   operation: JscadOperation,
 ): any => {
+  if (Array.isArray(operation) && operation.length === 1) {
+    return executeJscadOperations(jscad, operation[0])
+  }
   if (Array.isArray(operation)) {
     throw new Error(
       `executeJscadOperations currently doesn't support Array<JscadOperation>, try adding a root union or or executing each element individually`,
