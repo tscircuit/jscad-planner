@@ -21,6 +21,8 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         type: "union",
         shapes,
       }),
+    },
+    hulls: {
       hull: (...shapes: JscadOperation[]): JscadOperation => ({
         type: "hull",
         shapes,
@@ -28,7 +30,7 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
       hullChain: (...shapes: JscadOperation[]): JscadOperation => ({
         type: "hullChain",
         shapes,
-      })
+      }),
     },
     colors: {
       colorize: (color: Color, shape: JscadOperation): JscadOperation => ({
