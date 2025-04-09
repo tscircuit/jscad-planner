@@ -23,13 +23,17 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
       }),
     },
     hulls: {
-      hull: (...shapes: JscadOperation[]): JscadOperation => ({
+      hull: (
+        ...shapes: (JscadOperation | JscadOperation[])[]
+      ): JscadOperation => ({
         type: "hull",
-        shapes,
+        shapes: shapes.flat(),
       }),
-      hullChain: (...shapes: JscadOperation[]): JscadOperation => ({
+      hullChain: (
+        ...shapes: (JscadOperation | JscadOperation[])[]
+      ): JscadOperation => ({
         type: "hullChain",
-        shapes,
+        shapes: shapes.flat(),
       }),
     },
     colors: {
@@ -71,7 +75,9 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         type: "polygon" as const,
         ...options,
       }),
-      cuboid: (options: { size: [number, number, number] }): JscadOperation => ({
+      cuboid: (options: {
+        size: [number, number, number]
+      }): JscadOperation => ({
         type: "cuboid",
         ...options,
       }),
