@@ -9,5 +9,10 @@ it("should be able to hull shapes", () => {
     type: "hull",
     shapes: [shape1, shape2],
   })
+
+  const hullShape2 = jscadPlanner.hulls.hull([shape1, shape2])
+  expect(hullShape2).toEqual({
+    type: "hull",
+    shapes: [shape1, shape2],
+  })
 })
- 
