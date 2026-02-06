@@ -80,6 +80,12 @@ export interface RotateOperation extends OperationBase {
   shape: JscadOperation
 }
 
+export interface RotateAxisOperation extends OperationBase {
+  type: "rotateX" | "rotateY" | "rotateZ"
+  angle: number
+  shape: JscadOperation
+}
+
 export interface ScaleOperation extends OperationBase {
   type: "scale"
   factors: number[]
@@ -115,7 +121,7 @@ export interface ExtrudeRotateOperation extends OperationBase {
 
 // Geometry creation operations
 export interface CreateGeom2Operation extends OperationBase {
-  type: "createGeom2"
+  type: "createGeom2" | "fromPointsGeom2"
   points: Vector2D[]
 }
 
@@ -180,6 +186,7 @@ export type JscadOperation =
   | CylinderOperation
   | PolygonOperation
   | RotateOperation
+  | RotateAxisOperation
   | ScaleOperation
   | TranslateOperation
   | ExtrudeLinearOperation

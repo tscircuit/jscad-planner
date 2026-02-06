@@ -42,6 +42,9 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   }
   transforms: {
     rotate: (angles: number[], geometry: ShapeOrOp) => ShapeOrOp
+    rotateX: (angle: number, geometry: ShapeOrOp) => ShapeOrOp
+    rotateY: (angle: number, geometry: ShapeOrOp) => ShapeOrOp
+    rotateZ: (angle: number, geometry: ShapeOrOp) => ShapeOrOp
     scale: (factors: number[], geometry: ShapeOrOp) => ShapeOrOp
     translate: (vector: number[], geometry: ShapeOrOp) => ShapeOrOp
   }
@@ -76,6 +79,7 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   geometries: {
     geom2: {
       create: (points: Vector2D[]) => ShapeOrOp
+      fromPoints: (points: Vector2D[]) => ShapeOrOp
     }
     geom3: {
       create: (polygons: Vector3D[][]) => ShapeOrOp

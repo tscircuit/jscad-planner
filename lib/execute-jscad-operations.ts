@@ -52,6 +52,12 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
       return jscad.primitives.roundedCuboid(params as RoundedCuboidOperation)
     case "rotate":
       return jscad.transforms.rotate(operation.angles, recurse(operation.shape))
+    case "rotateX":
+      return jscad.transforms.rotateX(operation.angle, recurse(operation.shape))
+    case "rotateY":
+      return jscad.transforms.rotateY(operation.angle, recurse(operation.shape))
+    case "rotateZ":
+      return jscad.transforms.rotateZ(operation.angle, recurse(operation.shape))
     case "scale":
       return jscad.transforms.scale(operation.factors, recurse(operation.shape))
     case "translate":
@@ -71,6 +77,8 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
       )
     case "createGeom2":
       return jscad.geometries.geom2.create(operation.points)
+    case "fromPointsGeom2":
+      return jscad.geometries.geom2.fromPoints(operation.points)
     case "createGeom3":
       return jscad.geometries.geom3.create(operation.polygons)
     case "createPath2":

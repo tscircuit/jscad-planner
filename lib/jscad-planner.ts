@@ -96,6 +96,21 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         angles,
         shape,
       }),
+      rotateX: (angle: number, shape: JscadOperation): JscadOperation => ({
+        type: "rotateX",
+        angle,
+        shape,
+      }),
+      rotateY: (angle: number, shape: JscadOperation): JscadOperation => ({
+        type: "rotateY",
+        angle,
+        shape,
+      }),
+      rotateZ: (angle: number, shape: JscadOperation): JscadOperation => ({
+        type: "rotateZ",
+        angle,
+        shape,
+      }),
       scale: (factors: number[], shape: JscadOperation): JscadOperation => ({
         type: "scale",
         factors,
@@ -133,6 +148,10 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
       geom2: {
         create: (points: Vector2D[]): JscadOperation => ({
           type: "createGeom2",
+          points,
+        }),
+        fromPoints: (points: Vector2D[]): JscadOperation => ({
+          type: "fromPointsGeom2",
           points,
         }),
       },
