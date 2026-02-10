@@ -1,12 +1,12 @@
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   CubeOperation,
+  CuboidOperation,
   CylinderOperation,
   JscadOperation,
-  SphereOperation,
   PolygonOperation,
-  CuboidOperation,
   RoundedCuboidOperation,
+  SphereOperation,
 } from "./jscad-operations-types"
 
 export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
