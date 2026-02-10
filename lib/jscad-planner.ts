@@ -1,7 +1,7 @@
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
-  JscadOperation,
   Color,
+  JscadOperation,
   Vector2D,
   Vector3D,
 } from "./jscad-operations-types"
