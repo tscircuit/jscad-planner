@@ -161,7 +161,7 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         }),
       },
       geom3: {
-        create: (polygons: any[]): JscadOperation => ({
+        create: (polygons): JscadOperation => ({
           type: "createGeom3",
           polygons,
         }),

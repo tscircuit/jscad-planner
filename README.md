@@ -92,6 +92,16 @@ assertTransformMatrix(matrix)
 const plan: TransformOperation = { type: "transform", matrix, shape }
 ```
 
+### Custom 3D geometry
+
+`jscadPlanner.geometries.geom3.create(polygons)` accepts `JscadPolygon3[]`,
+matching the polygon objects returned by `jscad.geometries.geom3.toPolygons`.
+Each polygon contains `vertices: Vector3D[]` and may include RGB/RGBA `color`
+and a four-number `plane`. Raw vertex arrays are not polygon objects; use
+`jscad.geometries.poly3.create(vertices)` to construct them. The plan preserves
+these serializable polygon objects unchanged, including when nested in a
+matrix transform.
+
 ### executeJscadOperations
 
 This function takes a JSCAD implementation and a serialized operation, and executes it.
