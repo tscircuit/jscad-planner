@@ -80,6 +80,19 @@ coordinate frames. Both 3D solids and 2D geometries are supported by JSCAD.
 Existing `rotate`, `rotateX/Y/Z`, `scale`, and `translate` APIs are unchanged.
 Custom `JscadImplementation` adapters must provide `transforms.transform`.
 
+`toTransformMatrix(matrix: ArrayLike<number>): Matrix4` validates and copies
+numeric arrays, `Float32Array`, or `Float64Array` into a fresh serializable
+tuple. It preserves every numeric entry without rounding or reordering:
+
+```typescript
+import { toTransformMatrix } from "jscad-planner"
+
+const plan = jscadPlanner.transforms.transform(
+  toTransformMatrix(externalMat4),
+  shape,
+)
+```
+
 For numeric arrays or a copied `Float32Array` (such as gl-matrix's default
 `mat4`), `assertTransformMatrix` validates and narrows the array to `Matrix4`
 without a type assertion:
