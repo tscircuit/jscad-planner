@@ -2,6 +2,25 @@
 export type Color = [number, number, number]
 export type Vector2D = [number, number]
 export type Vector3D = [number, number, number]
+/** A column-major 4x4 matrix, with translation at indices 12, 13, and 14. */
+export type Matrix4 = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+]
 
 export interface OperationBase {
   type: string
@@ -74,6 +93,12 @@ export interface PolygonOperation extends OperationBase {
 }
 
 // Transformation operations
+export interface TransformOperation extends OperationBase {
+  type: "transform"
+  matrix: Matrix4
+  shape: JscadOperation
+}
+
 export interface RotateOperation extends OperationBase {
   type: "rotate"
   angles: number[]
@@ -185,6 +210,7 @@ export type JscadOperation =
   | SphereOperation
   | CylinderOperation
   | PolygonOperation
+  | TransformOperation
   | RotateOperation
   | RotateAxisOperation
   | ScaleOperation

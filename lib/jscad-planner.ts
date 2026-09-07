@@ -1,3 +1,4 @@
+import { assertTransformMatrix } from "./assert-transform-matrix"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   JscadOperation,
@@ -91,6 +92,10 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
       }),
     },
     transforms: {
+      transform: (matrix, shape): JscadOperation => {
+        assertTransformMatrix(matrix)
+        return { type: "transform", matrix, shape }
+      },
       rotate: (angles: number[], shape: JscadOperation): JscadOperation => ({
         type: "rotate",
         angles,

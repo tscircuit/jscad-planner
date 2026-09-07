@@ -47,11 +47,50 @@ The `jscadPlanner` object provides all the methods to create JSCAD operations th
 - `booleans`: Methods for boolean operations (union, subtract, intersect)
 - `colors`: Methods for colorizing shapes
 - `primitives`: Methods for creating primitive shapes (cube, sphere, cylinder)
-- `transformations`: Methods for transforming shapes (rotate, scale, translate)
+- `transforms`: Methods for transforming shapes (transform, rotate, scale, translate)
 - `extrusions`: Methods for extruding shapes
 - `geometries`: Methods for creating custom geometries
 - `measurements`: Methods for measuring shapes
 - `utils`: Utility methods (degree/radian conversion)
+
+### Matrix transforms
+
+`jscadPlanner.transforms.transform(matrix, shape)` creates a serializable
+`{ type: "transform", matrix, shape }` operation. `matrix` is a `Matrix4` tuple
+of exactly 16 finite numbers in **column-major** order, matching JSCAD's mat4
+convention (translation occupies indices 12, 13, and 14). The planner and
+interpreter reject malformed matrices. Use a plain array, not a typed array,
+so the plan can round-trip through JSON.
+
+```typescript
+const { mat4 } = jscad.maths
+const rotation = mat4.fromRotation(mat4.create(), Math.PI / 3, [1, 2, 3])
+const translation = mat4.fromTranslation(mat4.create(), [10, 20, 30])
+const matrix = mat4.multiply(mat4.create(), translation, rotation)
+const plan = jscadPlanner.transforms.transform(
+  matrix,
+  jscadPlanner.primitives.cuboid({ size: [2, 4, 6] }),
+)
+```
+
+This applies rotation first, then translation. Nested transforms execute from
+the innermost shape outward. The interpreter forwards the matrix unchanged to
+`jscad.transforms.transform`; it does not decompose rotations or convert
+coordinate frames. Both 3D solids and 2D geometries are supported by JSCAD.
+Existing `rotate`, `rotateX/Y/Z`, `scale`, and `translate` APIs are unchanged.
+Custom `JscadImplementation` adapters must provide `transforms.transform`.
+
+For numeric arrays or a copied `Float32Array` (such as gl-matrix's default
+`mat4`), `assertTransformMatrix` validates and narrows the array to `Matrix4`
+without a type assertion:
+
+```typescript
+import { assertTransformMatrix, type TransformOperation } from "jscad-planner"
+
+const matrix = [...externalMat4]
+assertTransformMatrix(matrix)
+const plan: TransformOperation = { type: "transform", matrix, shape }
+```
 
 ### executeJscadOperations
 
