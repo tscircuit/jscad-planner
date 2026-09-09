@@ -5,9 +5,17 @@ import type {
   Color,
   Vector2D,
   Vector3D,
+  Matrix4,
 } from "./jscad-operations-types"
 
-export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
+export const jscadPlanner: JscadImplementation<
+  JscadOperation,
+  JscadOperation
+> & {
+  transforms: {
+    transform: (matrix: Matrix4, shape: JscadOperation) => JscadOperation
+  }
+} =
   {
     booleans: {
       intersect: (...shapes: JscadOperation[]): JscadOperation => ({

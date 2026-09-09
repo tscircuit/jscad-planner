@@ -78,7 +78,24 @@ the innermost shape outward. The interpreter forwards the matrix unchanged to
 `jscad.transforms.transform`; it does not decompose rotations or convert
 coordinate frames. Both 3D solids and 2D geometries are supported by JSCAD.
 Existing `rotate`, `rotateX/Y/Z`, `scale`, and `translate` APIs are unchanged.
-Custom `JscadImplementation` adapters must provide `transforms.transform`.
+`transforms.transform` is optional on custom `JscadImplementation` adapters.
+Adapters without it can still execute legacy operations, including the existing
+rotation, scale, and translation operations. Executing a `transform` operation
+on such an adapter throws an explicit capability error before executing its
+child shape; matrices are not lowered into legacy operations. Adapters that
+provide the method receive the matrix unchanged. The concrete `jscadPlanner`
+export always provides a callable `transforms.transform` method.
+
+Use this operation when a placement matrix is already known, for example a
+part-local to assembly-local placement. Its source and destination frames belong
+to the caller; the planner does not infer them from the geometry. Nested
+rotate/translate/scale operations remain useful for constructing solids and are
+not replaced or automatically flattened. This API does not add matrix metadata
+to those existing operations.
+
+Plans containing `transform` require a matrix-capable interpreter. Older planner
+versions reject the new operation even when their native JSCAD implementation
+supports matrices. Update readers before emitting matrix operations to them.
 
 `toTransformMatrix(matrix: ArrayLike<number>): Matrix4` validates and copies
 numeric arrays, `Float32Array`, or `Float64Array` into a fresh serializable

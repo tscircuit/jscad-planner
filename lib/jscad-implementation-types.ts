@@ -47,7 +47,7 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
     }) => ShapeOrOp
   }
   transforms: {
-    transform: (matrix: Matrix4, geometry: ShapeOrOp) => ShapeOrOp
+    transform?: (matrix: Matrix4, geometry: ShapeOrOp) => ShapeOrOp
     rotate: (angles: number[], geometry: ShapeOrOp) => ShapeOrOp
     rotateX: (angle: number, geometry: ShapeOrOp) => ShapeOrOp
     rotateY: (angle: number, geometry: ShapeOrOp) => ShapeOrOp
