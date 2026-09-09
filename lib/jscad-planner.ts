@@ -1,12 +1,21 @@
+import { assertTransformMatrix } from "./assert-transform-matrix"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   JscadOperation,
   Color,
   Vector2D,
   Vector3D,
+  Matrix4,
 } from "./jscad-operations-types"
 
-export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
+export const jscadPlanner: JscadImplementation<
+  JscadOperation,
+  JscadOperation
+> & {
+  transforms: {
+    transform: (matrix: Matrix4, shape: JscadOperation) => JscadOperation
+  }
+} =
   {
     booleans: {
       intersect: (...shapes: JscadOperation[]): JscadOperation => ({
@@ -91,6 +100,10 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
       }),
     },
     transforms: {
+      transform: (matrix, shape): JscadOperation => {
+        assertTransformMatrix(matrix)
+        return { type: "transform", matrix, shape }
+      },
       rotate: (angles: number[], shape: JscadOperation): JscadOperation => ({
         type: "rotate",
         angles,
@@ -156,7 +169,7 @@ export const jscadPlanner: JscadImplementation<JscadOperation, JscadOperation> =
         }),
       },
       geom3: {
-        create: (polygons: any[]): JscadOperation => ({
+        create: (polygons): JscadOperation => ({
           type: "createGeom3",
           polygons,
         }),

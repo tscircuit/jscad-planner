@@ -1,4 +1,10 @@
-import type { Color, Vector2D, Vector3D } from "./jscad-operations-types"
+import type {
+  Color,
+  JscadPolygon3,
+  Matrix4,
+  Vector2D,
+  Vector3D,
+} from "./jscad-operations-types"
 
 export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   booleans: {
@@ -41,6 +47,7 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
     }) => ShapeOrOp
   }
   transforms: {
+    transform?: (matrix: Matrix4, geometry: ShapeOrOp) => ShapeOrOp
     rotate: (angles: number[], geometry: ShapeOrOp) => ShapeOrOp
     rotateX: (angle: number, geometry: ShapeOrOp) => ShapeOrOp
     rotateY: (angle: number, geometry: ShapeOrOp) => ShapeOrOp
@@ -82,7 +89,7 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
       fromPoints: (points: Vector2D[]) => ShapeOrOp
     }
     geom3: {
-      create: (polygons: Vector3D[][]) => ShapeOrOp
+      create: (polygons: JscadPolygon3[]) => ShapeOrOp
     }
     path2: {
       create: (points: Vector2D[]) => ShapeOrOp

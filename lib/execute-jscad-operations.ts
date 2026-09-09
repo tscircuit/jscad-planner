@@ -1,3 +1,4 @@
+import { assertTransformMatrix } from "./assert-transform-matrix"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   CubeOperation,
@@ -50,6 +51,17 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
       return jscad.primitives.cuboid(params as CuboidOperation)
     case "roundedCuboid":
       return jscad.primitives.roundedCuboid(params as RoundedCuboidOperation)
+    case "transform":
+      assertTransformMatrix(operation.matrix)
+      if (!jscad.transforms.transform) {
+        throw new Error(
+          'Cannot execute "transform" operation: this JSCAD adapter does not support transforms.transform',
+        )
+      }
+      return jscad.transforms.transform(
+        operation.matrix,
+        recurse(operation.shape),
+      )
     case "rotate":
       return jscad.transforms.rotate(operation.angles, recurse(operation.shape))
     case "rotateX":

@@ -3,6 +3,32 @@ export type Color = [number, number, number]
 export type Vector2D = [number, number]
 export type Vector3D = [number, number, number]
 
+export interface JscadPolygon3 {
+  vertices: Vector3D[]
+  color?: Color | [number, number, number, number]
+  plane?: [number, number, number, number]
+}
+
+/** A column-major 4x4 matrix, with translation at indices 12, 13, and 14. */
+export type Matrix4 = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+]
+
 export interface OperationBase {
   type: string
 }
@@ -74,6 +100,12 @@ export interface PolygonOperation extends OperationBase {
 }
 
 // Transformation operations
+export interface TransformOperation extends OperationBase {
+  type: "transform"
+  matrix: Matrix4
+  shape: JscadOperation
+}
+
 export interface RotateOperation extends OperationBase {
   type: "rotate"
   angles: number[]
@@ -127,7 +159,7 @@ export interface CreateGeom2Operation extends OperationBase {
 
 export interface CreateGeom3Operation extends OperationBase {
   type: "createGeom3"
-  polygons: any[]
+  polygons: JscadPolygon3[]
 }
 
 export interface CreatePath2Operation extends OperationBase {
@@ -185,6 +217,7 @@ export type JscadOperation =
   | SphereOperation
   | CylinderOperation
   | PolygonOperation
+  | TransformOperation
   | RotateOperation
   | RotateAxisOperation
   | ScaleOperation
