@@ -197,6 +197,7 @@ export interface RadToDegOperation extends OperationBase {
 export interface CuboidOperation extends OperationBase {
   type: "cuboid"
   size: [number, number, number]
+  center?: Vector3D
 }
 
 export interface RoundedCuboidOperation extends OperationBase {

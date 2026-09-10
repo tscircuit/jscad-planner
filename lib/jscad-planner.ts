@@ -86,6 +86,7 @@ export const jscadPlanner: JscadImplementation<
       }),
       cuboid: (options: {
         size: [number, number, number]
+        center?: Vector3D
       }): JscadOperation => ({
         type: "cuboid",
         ...options,
