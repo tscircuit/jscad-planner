@@ -46,10 +46,15 @@ export const jscadPlanner: JscadImplementation<
       }),
     },
     colors: {
-      colorize: (color: Color, shape: JscadOperation): JscadOperation => ({
+      colorize: (
+        color: Color,
+        shape: JscadOperation,
+        ...additionalShapes: JscadOperation[]
+      ): JscadOperation => ({
         type: "colorize",
         color,
         shape,
+        ...(additionalShapes.length > 0 ? { additionalShapes } : {}),
       }),
     },
     primitives: {
