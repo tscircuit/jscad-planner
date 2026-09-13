@@ -53,6 +53,18 @@ The `jscadPlanner` object provides all the methods to create JSCAD operations th
 - `measurements`: Methods for measuring shapes
 - `utils`: Utility methods (degree/radian conversion)
 
+### Coloring multiple shapes
+
+`jscadPlanner.colors.colorize(color, firstShape, ...otherShapes)` preserves all
+shapes in one serializable operation. With native JSCAD, execution returns one
+colored geometry for a single input or an array for multiple inputs; the shapes
+are not unioned. The result can be nested in other operations that accept
+multiple geometries, such as translations or unions.
+
+Single-shape plans retain their existing `shape` field. Multi-shape plans add
+`additionalShapes` and require an updated interpreter: older versions ignore
+that field and execute only the first shape.
+
 ### Matrix transforms
 
 `jscadPlanner.transforms.transform(matrix, shape)` creates a serializable

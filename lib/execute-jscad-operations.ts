@@ -38,7 +38,11 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
     case "hullChain":
       return jscad.hulls.hullChain(...operation.shapes.map(recurse))
     case "colorize":
-      return jscad.colors.colorize(operation.color, recurse(operation.shape))
+      return jscad.colors.colorize(
+        operation.color,
+        recurse(operation.shape),
+        ...(operation.additionalShapes ?? []).map(recurse),
+      )
     case "cube":
       return jscad.primitives.cube(params as CubeOperation)
     case "sphere":

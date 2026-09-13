@@ -63,6 +63,7 @@ export interface ColorizeOperation extends OperationBase {
   type: "colorize"
   color: Color
   shape: JscadOperation
+  additionalShapes?: JscadOperation[]
 }
 
 // Primitive operations
