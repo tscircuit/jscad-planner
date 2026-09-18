@@ -76,6 +76,8 @@ export interface SphereOperation extends OperationBase {
   type: "sphere"
   radius?: number
   center?: Vector3D
+  segments?: number
+  /** Legacy alias for segments. Explicit segments takes precedence. */
   resolution?: number
 }
 
@@ -84,6 +86,8 @@ export interface CylinderOperation extends OperationBase {
   radius?: number
   height?: number
   center?: Vector3D
+  segments?: number
+  /** Legacy alias for segments. Explicit segments takes precedence. */
   resolution?: number
 }
 

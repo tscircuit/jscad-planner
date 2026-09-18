@@ -1,4 +1,5 @@
 import { assertTransformMatrix } from "./assert-transform-matrix"
+import { withPrimitiveSegments } from "./with-primitive-segments"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   CubeOperation,
@@ -42,9 +43,13 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
     case "cube":
       return jscad.primitives.cube(params as CubeOperation)
     case "sphere":
-      return jscad.primitives.sphere(params as SphereOperation)
+      return jscad.primitives.sphere(
+        withPrimitiveSegments(params as SphereOperation),
+      )
     case "cylinder":
-      return jscad.primitives.cylinder(params as CylinderOperation)
+      return jscad.primitives.cylinder(
+        withPrimitiveSegments(params as CylinderOperation),
+      )
     case "polygon":
       return jscad.primitives.polygon(params as PolygonOperation)
     case "cuboid":
