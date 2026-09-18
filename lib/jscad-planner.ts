@@ -1,4 +1,5 @@
 import { assertTransformMatrix } from "./assert-transform-matrix"
+import { withPrimitiveSegments } from "./with-primitive-segments"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   JscadOperation,
@@ -63,19 +64,21 @@ export const jscadPlanner: JscadImplementation<
       sphere: (options?: {
         radius?: number
         center?: Vector3D
+        segments?: number
         resolution?: number
       }): JscadOperation => ({
         type: "sphere",
-        ...options,
+        ...withPrimitiveSegments(options ?? {}),
       }),
       cylinder: (options?: {
         radius?: number
         height?: number
         center?: Vector3D
+        segments?: number
         resolution?: number
       }): JscadOperation => ({
         type: "cylinder",
-        ...options,
+        ...withPrimitiveSegments(options ?? {}),
       }),
       polygon: (options: {
         points: Vector2D[] | Vector2D[][]

@@ -27,12 +27,16 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
     sphere: (options?: {
       radius?: number
       center?: Vector3D
+      segments?: number
+      /** Legacy alias for segments. Explicit segments takes precedence. */
       resolution?: number
     }) => ShapeOrOp
     cylinder: (options?: {
       radius?: number
       height?: number
       center?: Vector3D
+      segments?: number
+      /** Legacy alias for segments. Explicit segments takes precedence. */
       resolution?: number
     }) => ShapeOrOp
     polygon: (options: {

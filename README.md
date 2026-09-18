@@ -53,6 +53,14 @@ The `jscadPlanner` object provides all the methods to create JSCAD operations th
 - `measurements`: Methods for measuring shapes
 - `utils`: Utility methods (degree/radian conversion)
 
+### Sphere and cylinder tessellation
+
+Pass `segments` to `primitives.sphere` or `primitives.cylinder` to control
+tessellation, matching `@jscad/modeling`. The existing `resolution` option is
+supported as an alias; when both are present, `segments` takes precedence.
+The interpreter also resolves `resolution` in previously serialized plans.
+If neither option is provided, the native implementation keeps its default.
+
 ### Matrix transforms
 
 `jscadPlanner.transforms.transform(matrix, shape)` creates a serializable
