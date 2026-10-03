@@ -147,3 +147,49 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) f
 ## Acknowledgments
 
 - This project is designed to work with [JSCAD](https://github.com/jscad/OpenJSCAD.org), an open-source project for programmatic 3D modeling.
+
+### Named reference planes
+
+Mark a rectangle as construction geometry with `name` and `reference: true`.
+No changes to `@jscad/modeling` are needed. Reference geometry is extracted
+before CSG execution and is excluded from the solid and fabrication exports.
+
+```ts
+import { jscadPlanner as p, resolveReferencePlanes } from "jscad-planner"
+
+const plan = p.booleans.union(
+  p.primitives.cuboid({ size: [42, 42, 4] }),
+  p.transforms.translate([0, 0, 10], p.primitives.rectangle({
+    size: [42, 42], name: "board", reference: true,
+  })),
+)
+const { geometry, referencePlanes } = resolveReferencePlanes(plan)
+// referencePlanes[0]:
+// { name: "board", origin: [0,0,10], normal: [0,0,1], xAxis: [1,0,0] }
+```
+
+The rectangle's center defines its origin, local +Z defines its outward normal,
+and local +X defines its in-plane direction. Plan coordinates retain their
+original units (millimeters in tscircuit) and use right-handed XYZ. Origins are
+points; normals and axes are unit directions. Nested translations, rotations
+(radians), scales, and affine matrices are composed from the innermost shape
+outward. Nonuniform scaling and reflections use inverse-transpose normals.
+
+`resolveReferencePlanes` accepts a plan or an array of independent roots and
+returns `{ geometry, referencePlanes }` without mutating the input. Reference
+branches are removed before booleans. A reference cannot be a subtraction base
+or appear inside an extrusion/measurement input. Names must be nonblank and
+unique within the supplied plan. Singular, projective, and nonfinite reference
+transforms are rejected. A reference-only plan has `geometry: undefined`.
+
+`executeJscadOperations` also removes references automatically and rejects a
+reference-only plan rather than creating a printable placeholder. For existing
+viewers or exporters, pass the **geometry-only** result: older interpreters do
+not understand reference metadata and could include construction geometry.
+References can instead be visualized separately as a debugging overlay.
+
+Reference rectangles may also be represented by an axis-aligned four-corner
+`polygon` operation with `name` and `reference: true`. This is the exact lowering
+used by the headless `jscad-fiber` compiler. Its local bounds center supplies the
+origin; the authored transform stack supplies normal and in-plane direction.
+Other reference shapes are rejected rather than assigning a guessed frame.

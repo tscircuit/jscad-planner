@@ -18,5 +18,8 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "gl-matrix": "^3.4.4"
+  }
 }

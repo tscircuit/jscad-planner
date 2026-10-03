@@ -31,6 +31,16 @@ export type Matrix4 = [
 
 export interface OperationBase {
   type: string
+  /** Authoring identity; does not change the geometry. */
+  name?: string
+  /** Construction geometry, excluded from solid evaluation and export. */
+  reference?: boolean
+}
+
+export interface RectangleOperation extends OperationBase {
+  type: "rectangle"
+  size: Vector2D
+  center?: Vector2D
 }
 
 // Boolean operations
@@ -207,6 +217,7 @@ export interface RoundedCuboidOperation extends OperationBase {
 }
 
 export type JscadOperation =
+  | RectangleOperation
   | IntersectOperation
   | SubtractOperation
   | UnionOperation

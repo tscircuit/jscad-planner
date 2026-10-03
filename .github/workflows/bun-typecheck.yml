@@ -24,3 +24,9 @@ jobs:
 
       - name: Run type check
         run: bunx tsc --noEmit
+
+      - name: Run tests
+        run: bun test
+
+      - name: Build package
+        run: bun run build
