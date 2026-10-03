@@ -1,3 +1,4 @@
+import { resolveReferencePlanes } from "./resolve-reference-planes"
 import { assertTransformMatrix } from "./assert-transform-matrix"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
@@ -22,11 +23,27 @@ export const executeJscadOperations = <ShapeOrOp = any, MeasurementT = number>(
       `executeJscadOperations currently doesn't support Array<JscadOperation>, try adding a root union or or executing each element individually`,
     )
   }
-  const recurse = (op: JscadOperation) => executeJscadOperations(jscad, op)
+  const { geometry } = resolveReferencePlanes(operation)
+  if (!geometry) throw new Error("JSCAD plan contains only reference geometry")
+  return executeGeometry(jscad, geometry)
+}
+
+const executeGeometry = <ShapeOrOp, MeasurementT>(
+  jscad: JscadImplementation<ShapeOrOp, MeasurementT>,
+  operation: JscadOperation,
+): any => {
+  const recurse = (op: JscadOperation) => executeGeometry(jscad, op)
 
   const { type, ...params } = operation
 
   switch (type) {
+    case "rectangle":
+      if (!jscad.primitives.rectangle)
+        throw new Error("JSCAD adapter does not support primitives.rectangle")
+      return jscad.primitives.rectangle({
+        size: operation.size,
+        center: operation.center ?? [0, 0],
+      })
     case "intersect":
       return jscad.booleans.intersect(...operation.shapes.map(recurse))
     case "subtract":

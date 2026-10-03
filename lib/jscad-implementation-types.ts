@@ -2,6 +2,7 @@ import type {
   Color,
   JscadPolygon3,
   Matrix4,
+  RectangleOperation,
   Vector2D,
   Vector3D,
 } from "./jscad-operations-types"
@@ -20,6 +21,7 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
     colorize: (color: Color, ...geometries: ShapeOrOp[]) => ShapeOrOp
   }
   primitives: {
+    rectangle?: (options: Omit<RectangleOperation, "type">) => ShapeOrOp
     cube: (options?: {
       size?: number | number[]
       center?: Vector3D

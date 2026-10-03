@@ -6,198 +6,205 @@ import type {
   Vector2D,
   Vector3D,
   Matrix4,
+  RectangleOperation,
 } from "./jscad-operations-types"
 
 export const jscadPlanner: JscadImplementation<
   JscadOperation,
   JscadOperation
 > & {
+  primitives: {
+    rectangle: (options: Omit<RectangleOperation, "type">) => RectangleOperation
+  }
   transforms: {
     transform: (matrix: Matrix4, shape: JscadOperation) => JscadOperation
   }
-} =
-  {
-    booleans: {
-      intersect: (...shapes: JscadOperation[]): JscadOperation => ({
-        type: "intersect",
-        shapes,
+} = {
+  booleans: {
+    intersect: (...shapes: JscadOperation[]): JscadOperation => ({
+      type: "intersect",
+      shapes,
+    }),
+    subtract: (...shapes: JscadOperation[]): JscadOperation => ({
+      type: "subtract",
+      shapes,
+    }),
+    union: (...shapes: JscadOperation[]): JscadOperation => ({
+      type: "union",
+      shapes,
+    }),
+  },
+  hulls: {
+    hull: (
+      ...shapes: (JscadOperation | JscadOperation[])[]
+    ): JscadOperation => ({
+      type: "hull",
+      shapes: shapes.flat(),
+    }),
+    hullChain: (
+      ...shapes: (JscadOperation | JscadOperation[])[]
+    ): JscadOperation => ({
+      type: "hullChain",
+      shapes: shapes.flat(),
+    }),
+  },
+  colors: {
+    colorize: (color: Color, shape: JscadOperation): JscadOperation => ({
+      type: "colorize",
+      color,
+      shape,
+    }),
+  },
+  primitives: {
+    rectangle: (options): RectangleOperation => ({
+      ...options,
+      type: "rectangle",
+    }),
+    cube: (options?: {
+      size?: number | number[]
+      center?: Vector3D
+    }): JscadOperation => ({
+      type: "cube",
+      ...options,
+    }),
+    sphere: (options?: {
+      radius?: number
+      center?: Vector3D
+      resolution?: number
+    }): JscadOperation => ({
+      type: "sphere",
+      ...options,
+    }),
+    cylinder: (options?: {
+      radius?: number
+      height?: number
+      center?: Vector3D
+      resolution?: number
+    }): JscadOperation => ({
+      type: "cylinder",
+      ...options,
+    }),
+    polygon: (options: {
+      points: Vector2D[] | Vector2D[][]
+      paths?: number[] | number[][]
+    }): JscadOperation => ({
+      type: "polygon" as const,
+      ...options,
+    }),
+    cuboid: (options: {
+      size: [number, number, number]
+    }): JscadOperation => ({
+      type: "cuboid",
+      ...options,
+    }),
+    roundedCuboid: (options: {
+      size: [number, number, number]
+      roundRadius: number
+      segments?: number
+    }): JscadOperation => ({
+      type: "roundedCuboid",
+      ...options,
+    }),
+  },
+  transforms: {
+    transform: (matrix, shape): JscadOperation => {
+      assertTransformMatrix(matrix)
+      return { type: "transform", matrix, shape }
+    },
+    rotate: (angles: number[], shape: JscadOperation): JscadOperation => ({
+      type: "rotate",
+      angles,
+      shape,
+    }),
+    rotateX: (angle: number, shape: JscadOperation): JscadOperation => ({
+      type: "rotateX",
+      angle,
+      shape,
+    }),
+    rotateY: (angle: number, shape: JscadOperation): JscadOperation => ({
+      type: "rotateY",
+      angle,
+      shape,
+    }),
+    rotateZ: (angle: number, shape: JscadOperation): JscadOperation => ({
+      type: "rotateZ",
+      angle,
+      shape,
+    }),
+    scale: (factors: number[], shape: JscadOperation): JscadOperation => ({
+      type: "scale",
+      factors,
+      shape,
+    }),
+    translate: (vector: number[], shape: JscadOperation): JscadOperation => ({
+      type: "translate",
+      vector,
+      shape,
+    }),
+  },
+  extrusions: {
+    extrudeLinear: (options: any, shape: JscadOperation): JscadOperation => ({
+      type: "extrudeLinear",
+      options,
+      shape,
+    }),
+    extrudeRotate: (options: any, shape: JscadOperation): JscadOperation => ({
+      type: "extrudeRotate",
+      options,
+      shape,
+    }),
+  },
+  maths: {
+    vec2: {
+      create: (x: number, y: number): Vector2D => [x, y],
+      fromValues: (x: number, y: number): Vector2D => [x, y],
+    },
+    vec3: {
+      create: (x: number, y: number, z: number): Vector3D => [x, y, z],
+      fromValues: (x: number, y: number, z: number): Vector3D => [x, y, z],
+    },
+  },
+  geometries: {
+    geom2: {
+      create: (points: Vector2D[]): JscadOperation => ({
+        type: "createGeom2",
+        points,
       }),
-      subtract: (...shapes: JscadOperation[]): JscadOperation => ({
-        type: "subtract",
-        shapes,
-      }),
-      union: (...shapes: JscadOperation[]): JscadOperation => ({
-        type: "union",
-        shapes,
+      fromPoints: (points: Vector2D[]): JscadOperation => ({
+        type: "fromPointsGeom2",
+        points,
       }),
     },
-    hulls: {
-      hull: (
-        ...shapes: (JscadOperation | JscadOperation[])[]
-      ): JscadOperation => ({
-        type: "hull",
-        shapes: shapes.flat(),
-      }),
-      hullChain: (
-        ...shapes: (JscadOperation | JscadOperation[])[]
-      ): JscadOperation => ({
-        type: "hullChain",
-        shapes: shapes.flat(),
+    geom3: {
+      create: (polygons): JscadOperation => ({
+        type: "createGeom3",
+        polygons,
       }),
     },
-    colors: {
-      colorize: (color: Color, shape: JscadOperation): JscadOperation => ({
-        type: "colorize",
-        color,
-        shape,
+    path2: {
+      create: (points: Vector2D[]): JscadOperation => ({
+        type: "createPath2",
+        points,
       }),
     },
-    primitives: {
-      cube: (options?: {
-        size?: number | number[]
-        center?: Vector3D
-      }): JscadOperation => ({
-        type: "cube",
-        ...options,
-      }),
-      sphere: (options?: {
-        radius?: number
-        center?: Vector3D
-        resolution?: number
-      }): JscadOperation => ({
-        type: "sphere",
-        ...options,
-      }),
-      cylinder: (options?: {
-        radius?: number
-        height?: number
-        center?: Vector3D
-        resolution?: number
-      }): JscadOperation => ({
-        type: "cylinder",
-        ...options,
-      }),
-      polygon: (options: {
-        points: Vector2D[] | Vector2D[][]
-        paths?: number[] | number[][]
-      }): JscadOperation => ({
-        type: "polygon" as const,
-        ...options,
-      }),
-      cuboid: (options: {
-        size: [number, number, number]
-      }): JscadOperation => ({
-        type: "cuboid",
-        ...options,
-      }),
-      roundedCuboid: (options: {
-        size: [number, number, number]
-        roundRadius: number
-        segments?: number
-      }): JscadOperation => ({
-        type: "roundedCuboid",
-        ...options,
-      }),
-    },
-    transforms: {
-      transform: (matrix, shape): JscadOperation => {
-        assertTransformMatrix(matrix)
-        return { type: "transform", matrix, shape }
-      },
-      rotate: (angles: number[], shape: JscadOperation): JscadOperation => ({
-        type: "rotate",
-        angles,
-        shape,
-      }),
-      rotateX: (angle: number, shape: JscadOperation): JscadOperation => ({
-        type: "rotateX",
-        angle,
-        shape,
-      }),
-      rotateY: (angle: number, shape: JscadOperation): JscadOperation => ({
-        type: "rotateY",
-        angle,
-        shape,
-      }),
-      rotateZ: (angle: number, shape: JscadOperation): JscadOperation => ({
-        type: "rotateZ",
-        angle,
-        shape,
-      }),
-      scale: (factors: number[], shape: JscadOperation): JscadOperation => ({
-        type: "scale",
-        factors,
-        shape,
-      }),
-      translate: (vector: number[], shape: JscadOperation): JscadOperation => ({
-        type: "translate",
-        vector,
-        shape,
-      }),
-    },
-    extrusions: {
-      extrudeLinear: (options: any, shape: JscadOperation): JscadOperation => ({
-        type: "extrudeLinear",
-        options,
-        shape,
-      }),
-      extrudeRotate: (options: any, shape: JscadOperation): JscadOperation => ({
-        type: "extrudeRotate",
-        options,
-        shape,
-      }),
-    },
-    maths: {
-      vec2: {
-        create: (x: number, y: number): Vector2D => [x, y],
-        fromValues: (x: number, y: number): Vector2D => [x, y],
-      },
-      vec3: {
-        create: (x: number, y: number, z: number): Vector3D => [x, y, z],
-        fromValues: (x: number, y: number, z: number): Vector3D => [x, y, z],
-      },
-    },
-    geometries: {
-      geom2: {
-        create: (points: Vector2D[]): JscadOperation => ({
-          type: "createGeom2",
-          points,
-        }),
-        fromPoints: (points: Vector2D[]): JscadOperation => ({
-          type: "fromPointsGeom2",
-          points,
-        }),
-      },
-      geom3: {
-        create: (polygons): JscadOperation => ({
-          type: "createGeom3",
-          polygons,
-        }),
-      },
-      path2: {
-        create: (points: Vector2D[]): JscadOperation => ({
-          type: "createPath2",
-          points,
-        }),
-      },
-    },
+  },
 
-    measurements: {
-      measureBoundingBox: (shape: JscadOperation): JscadOperation => ({
-        type: "measureBoundingBox",
-        shape,
-      }),
-      measureArea: (shape: JscadOperation): JscadOperation => ({
-        type: "measureArea",
-        shape,
-      }),
-      measureVolume: (shape: JscadOperation): JscadOperation => ({
-        type: "measureVolume",
-        shape,
-      }),
-    },
-    utils: {
-      degToRad: (degrees: number) => (degrees * Math.PI) / 180,
-      radToDeg: (radians: number) => (radians * 180) / Math.PI,
-    },
-  }
+  measurements: {
+    measureBoundingBox: (shape: JscadOperation): JscadOperation => ({
+      type: "measureBoundingBox",
+      shape,
+    }),
+    measureArea: (shape: JscadOperation): JscadOperation => ({
+      type: "measureArea",
+      shape,
+    }),
+    measureVolume: (shape: JscadOperation): JscadOperation => ({
+      type: "measureVolume",
+      shape,
+    }),
+  },
+  utils: {
+    degToRad: (degrees: number) => (degrees * Math.PI) / 180,
+    radToDeg: (radians: number) => (radians * 180) / Math.PI,
+  },
+}
