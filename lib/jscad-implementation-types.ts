@@ -6,9 +6,13 @@ import type {
   Vector2D,
   Vector3D,
 } from "./jscad-operations-types"
-import type { MaterialProps } from "./material"
+import type { MaterialOptions, MaterialProps } from "./material"
 
 export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
+  /** Optional: native JSCAD implementations use the planner's metadata fallback. */
+  materials?: {
+    applyMaterial: (material: MaterialOptions, geometry: ShapeOrOp) => ShapeOrOp
+  }
   booleans: {
     intersect: (...geometries: ShapeOrOp[]) => ShapeOrOp
     subtract: (...geometries: ShapeOrOp[]) => ShapeOrOp

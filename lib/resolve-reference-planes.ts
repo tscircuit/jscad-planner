@@ -187,6 +187,10 @@ export function resolveReferencePlanes(
         const shape = visit(operation.shape, transforms, inProfile)
         return shape ? { ...operation, shape } : undefined
       }
+      case "applyMaterial": {
+        const shape = visit(operation.shape, transforms, inProfile)
+        return shape ? { ...operation, shape } : undefined
+      }
       case "extrudeLinear":
       case "extrudeRotate":
       case "measureArea":

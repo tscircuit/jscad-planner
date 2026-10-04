@@ -1,6 +1,6 @@
 import { resolveReferencePlanes } from "./resolve-reference-planes"
 import { assertTransformMatrix } from "./assert-transform-matrix"
-import { preserveMaterial } from "./material"
+import { materials, preserveMaterial } from "./material"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   CubeOperation,
@@ -41,6 +41,7 @@ const executeGeometry = <ShapeOrOp, MeasurementT>(
     case "measureVolume":
     case "degToRad":
     case "radToDeg":
+    case "applyMaterial":
       return result
     default:
       return preserveMaterial(operation, result)
@@ -77,6 +78,23 @@ const evaluateOperation = <ShapeOrOp, MeasurementT>(
   const { type, material, ...params } = operation
 
   switch (type) {
+    case "applyMaterial": {
+      if (
+        [
+          "measureBoundingBox",
+          "measureArea",
+          "measureVolume",
+          "degToRad",
+          "radToDeg",
+        ].includes(operation.shape.type)
+      ) {
+        throw new Error("applyMaterial requires a geometry operation")
+      }
+      const geometry = recurse(operation.shape)
+      return jscad.materials
+        ? jscad.materials.applyMaterial(operation.material, geometry)
+        : materials.applyMaterial(operation.material, geometry)
+    }
     case "rectangle":
       if (!jscad.primitives.rectangle)
         throw new Error("JSCAD adapter does not support primitives.rectangle")

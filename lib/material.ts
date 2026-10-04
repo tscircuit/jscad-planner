@@ -17,17 +17,17 @@ export interface MaterialProps {
 }
 
 /** Attach appearance metadata without mutating an operation or geometry. */
-export function withMaterial<T extends object>(
+function applyMaterial<T extends object>(
+  material: MaterialOptions,
   shapes: T[],
-  material: MaterialOptions,
 ): Array<T & { material: MaterialOptions }>
-export function withMaterial<T extends object>(
-  shape: T,
+function applyMaterial<T extends object>(
   material: MaterialOptions,
+  shape: T,
 ): T & { material: MaterialOptions }
-export function withMaterial(shape: object, material: MaterialOptions): object {
+function applyMaterial(material: MaterialOptions, shape: object): object {
   if (Array.isArray(shape)) {
-    return shape.map((item) => withMaterial(item, material))
+    return shape.map((item) => applyMaterial(material, item))
   }
   return {
     ...shape,
@@ -50,5 +50,8 @@ export function preserveMaterial<T>(source: MaterialProps, result: T): T {
   if (!result || typeof result !== "object") {
     throw new Error("Material metadata requires object geometry")
   }
-  return withMaterial(result, source.material)
+  return applyMaterial(source.material, result)
 }
+
+/** Native material implementation for object geometry and geometry arrays. */
+export const materials = { applyMaterial }

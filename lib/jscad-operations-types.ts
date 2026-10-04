@@ -1,5 +1,5 @@
 // Type definitions
-import type { MaterialProps } from "./material"
+import type { MaterialOptions, MaterialProps } from "./material"
 export type Color = [number, number, number]
 export type Vector2D = [number, number]
 export type Vector3D = [number, number, number]
@@ -73,6 +73,12 @@ export interface HullChainOperation extends OperationBase {
 export interface ColorizeOperation extends OperationBase {
   type: "colorize"
   color: Color
+  shape: JscadOperation
+}
+
+export interface ApplyMaterialOperation extends OperationBase {
+  type: "applyMaterial"
+  material: MaterialOptions
   shape: JscadOperation
 }
 
@@ -218,6 +224,7 @@ export interface RoundedCuboidOperation extends OperationBase {
 }
 
 export type JscadOperation =
+  | ApplyMaterialOperation
   | RectangleOperation
   | IntersectOperation
   | SubtractOperation
