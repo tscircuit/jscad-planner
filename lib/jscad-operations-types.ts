@@ -1,4 +1,5 @@
 // Type definitions
+import type { MaterialProps } from "./material"
 export type Color = [number, number, number]
 export type Vector2D = [number, number]
 export type Vector3D = [number, number, number]
@@ -29,7 +30,7 @@ export type Matrix4 = [
   number,
 ]
 
-export interface OperationBase {
+export interface OperationBase extends MaterialProps {
   type: string
   /** Authoring identity; does not change the geometry. */
   name?: string

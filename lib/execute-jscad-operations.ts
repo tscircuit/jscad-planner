@@ -1,5 +1,6 @@
 import { resolveReferencePlanes } from "./resolve-reference-planes"
 import { assertTransformMatrix } from "./assert-transform-matrix"
+import { preserveMaterial } from "./material"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   CubeOperation,
@@ -32,9 +33,48 @@ const executeGeometry = <ShapeOrOp, MeasurementT>(
   jscad: JscadImplementation<ShapeOrOp, MeasurementT>,
   operation: JscadOperation,
 ): any => {
-  const recurse = (op: JscadOperation) => executeGeometry(jscad, op)
+  const result = evaluateOperation(jscad, operation)
+  // Measurements and unit conversions have no geometry to carry appearance.
+  switch (operation.type) {
+    case "measureBoundingBox":
+    case "measureArea":
+    case "measureVolume":
+    case "degToRad":
+    case "radToDeg":
+      return result
+    default:
+      return preserveMaterial(operation, result)
+  }
+}
 
-  const { type, ...params } = operation
+const evaluateOperation = <ShapeOrOp, MeasurementT>(
+  jscad: JscadImplementation<ShapeOrOp, MeasurementT>,
+  operation: JscadOperation,
+): any => {
+  const recurse = (op: JscadOperation) => executeGeometry(jscad, op)
+  const transformShape = (
+    operation: JscadOperation,
+    transform: (shape: ShapeOrOp) => ShapeOrOp,
+  ) => {
+    const shape = recurse(operation)
+    return preserveMaterial(shape, transform(shape))
+  }
+  const combineShapes = (
+    shapes: JscadOperation[],
+    combine: (...shapes: ShapeOrOp[]) => ShapeOrOp,
+  ) => {
+    const result = combine(...shapes.map(recurse))
+    // An adapter may copy metadata from its first operand. A combined solid
+    // must use the operation's explicit material, not an arbitrary operand's.
+    if (result && typeof result === "object" && "material" in result) {
+      const { material, ...geometry } = result
+      return geometry
+    }
+    return result
+  }
+
+  // Material metadata is handled here, not passed as a modeling option.
+  const { type, material, ...params } = operation
 
   switch (type) {
     case "rectangle":
@@ -45,17 +85,32 @@ const executeGeometry = <ShapeOrOp, MeasurementT>(
         center: operation.center ?? [0, 0],
       })
     case "intersect":
-      return jscad.booleans.intersect(...operation.shapes.map(recurse))
-    case "subtract":
-      return jscad.booleans.subtract(...operation.shapes.map(recurse))
+      return combineShapes(operation.shapes, (...shapes) =>
+        jscad.booleans.intersect(...shapes),
+      )
+    case "subtract": {
+      const shapes = operation.shapes.map(recurse)
+      return preserveMaterial(
+        shapes[0] ?? {},
+        jscad.booleans.subtract(...shapes),
+      )
+    }
     case "union":
-      return jscad.booleans.union(...operation.shapes.map(recurse))
+      return combineShapes(operation.shapes, (...shapes) =>
+        jscad.booleans.union(...shapes),
+      )
     case "hull":
-      return jscad.hulls.hull(...operation.shapes.map(recurse))
+      return combineShapes(operation.shapes, (...shapes) =>
+        jscad.hulls.hull(...shapes),
+      )
     case "hullChain":
-      return jscad.hulls.hullChain(...operation.shapes.map(recurse))
+      return combineShapes(operation.shapes, (...shapes) =>
+        jscad.hulls.hullChain(...shapes),
+      )
     case "colorize":
-      return jscad.colors.colorize(operation.color, recurse(operation.shape))
+      return transformShape(operation.shape, (shape) =>
+        jscad.colors.colorize(operation.color, shape),
+      )
     case "cube":
       return jscad.primitives.cube(params as CubeOperation)
     case "sphere":
@@ -75,34 +130,40 @@ const executeGeometry = <ShapeOrOp, MeasurementT>(
           'Cannot execute "transform" operation: this JSCAD adapter does not support transforms.transform',
         )
       }
-      return jscad.transforms.transform(
-        operation.matrix,
-        recurse(operation.shape),
+      return transformShape(operation.shape, (shape) =>
+        jscad.transforms.transform!(operation.matrix, shape),
       )
     case "rotate":
-      return jscad.transforms.rotate(operation.angles, recurse(operation.shape))
+      return transformShape(operation.shape, (shape) =>
+        jscad.transforms.rotate(operation.angles, shape),
+      )
     case "rotateX":
-      return jscad.transforms.rotateX(operation.angle, recurse(operation.shape))
+      return transformShape(operation.shape, (shape) =>
+        jscad.transforms.rotateX(operation.angle, shape),
+      )
     case "rotateY":
-      return jscad.transforms.rotateY(operation.angle, recurse(operation.shape))
+      return transformShape(operation.shape, (shape) =>
+        jscad.transforms.rotateY(operation.angle, shape),
+      )
     case "rotateZ":
-      return jscad.transforms.rotateZ(operation.angle, recurse(operation.shape))
+      return transformShape(operation.shape, (shape) =>
+        jscad.transforms.rotateZ(operation.angle, shape),
+      )
     case "scale":
-      return jscad.transforms.scale(operation.factors, recurse(operation.shape))
+      return transformShape(operation.shape, (shape) =>
+        jscad.transforms.scale(operation.factors, shape),
+      )
     case "translate":
-      return jscad.transforms.translate(
-        operation.vector,
-        recurse(operation.shape),
+      return transformShape(operation.shape, (shape) =>
+        jscad.transforms.translate(operation.vector, shape),
       )
     case "extrudeLinear":
-      return jscad.extrusions.extrudeLinear(
-        operation.options,
-        recurse(operation.shape),
+      return transformShape(operation.shape, (shape) =>
+        jscad.extrusions.extrudeLinear(operation.options, shape),
       )
     case "extrudeRotate":
-      return jscad.extrusions.extrudeRotate(
-        operation.options,
-        recurse(operation.shape),
+      return transformShape(operation.shape, (shape) =>
+        jscad.extrusions.extrudeRotate(operation.options, shape),
       )
     case "createGeom2":
       return jscad.geometries.geom2.create(operation.points)
