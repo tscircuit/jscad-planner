@@ -1,6 +1,6 @@
 {
   "name": "jscad-planner",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "main": "dist/index.cjs",
   "repository": {
     "type": "git",
