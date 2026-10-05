@@ -6,8 +6,13 @@ import type {
   Vector2D,
   Vector3D,
 } from "./jscad-operations-types"
+import type { MaterialOptions, MaterialProps } from "./material"
 
 export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
+  /** Optional: native JSCAD implementations use the planner's metadata fallback. */
+  materials?: {
+    applyMaterial: (material: MaterialOptions, geometry: ShapeOrOp) => ShapeOrOp
+  }
   booleans: {
     intersect: (...geometries: ShapeOrOp[]) => ShapeOrOp
     subtract: (...geometries: ShapeOrOp[]) => ShapeOrOp
@@ -22,31 +27,43 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   }
   primitives: {
     rectangle?: (options: Omit<RectangleOperation, "type">) => ShapeOrOp
-    cube: (options?: {
-      size?: number | number[]
-      center?: Vector3D
-    }) => ShapeOrOp
-    sphere: (options?: {
-      radius?: number
-      center?: Vector3D
-      resolution?: number
-    }) => ShapeOrOp
-    cylinder: (options?: {
-      radius?: number
-      height?: number
-      center?: Vector3D
-      resolution?: number
-    }) => ShapeOrOp
-    polygon: (options: {
-      points: Vector2D[] | Vector2D[][]
-      paths?: number[] | number[][]
-    }) => ShapeOrOp
-    cuboid: (options: { size: [number, number, number] }) => ShapeOrOp
-    roundedCuboid: (options: {
-      size: [number, number, number]
-      roundRadius: number
-      segments?: number
-    }) => ShapeOrOp
+    cube: (
+      options?: MaterialProps & {
+        size?: number | number[]
+        center?: Vector3D
+      },
+    ) => ShapeOrOp
+    sphere: (
+      options?: MaterialProps & {
+        radius?: number
+        center?: Vector3D
+        resolution?: number
+      },
+    ) => ShapeOrOp
+    cylinder: (
+      options?: MaterialProps & {
+        radius?: number
+        height?: number
+        center?: Vector3D
+        resolution?: number
+      },
+    ) => ShapeOrOp
+    polygon: (
+      options: MaterialProps & {
+        points: Vector2D[] | Vector2D[][]
+        paths?: number[] | number[][]
+      },
+    ) => ShapeOrOp
+    cuboid: (
+      options: MaterialProps & { size: [number, number, number] },
+    ) => ShapeOrOp
+    roundedCuboid: (
+      options: MaterialProps & {
+        size: [number, number, number]
+        roundRadius: number
+        segments?: number
+      },
+    ) => ShapeOrOp
   }
   transforms: {
     transform?: (matrix: Matrix4, geometry: ShapeOrOp) => ShapeOrOp

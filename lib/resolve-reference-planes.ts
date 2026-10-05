@@ -1,4 +1,5 @@
 import { mat4, vec3 } from "gl-matrix"
+import { preserveMaterial } from "./material"
 import {
   assertTransformMatrix,
   toTransformMatrix,
@@ -186,6 +187,10 @@ export function resolveReferencePlanes(
         const shape = visit(operation.shape, transforms, inProfile)
         return shape ? { ...operation, shape } : undefined
       }
+      case "applyMaterial": {
+        const shape = visit(operation.shape, transforms, inProfile)
+        return shape ? { ...operation, shape } : undefined
+      }
       case "extrudeLinear":
       case "extrudeRotate":
       case "measureArea":
@@ -213,7 +218,7 @@ export function resolveReferencePlanes(
           (shape): shape is JscadOperation => shape !== undefined,
         )
         if (!shapes.length) return undefined
-        if (shapes.length === 1) return shapes[0]
+        if (shapes.length === 1) return preserveMaterial(operation, shapes[0])
         return { ...operation, shapes }
       }
       default:

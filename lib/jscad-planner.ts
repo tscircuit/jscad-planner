@@ -1,4 +1,5 @@
 import { assertTransformMatrix } from "./assert-transform-matrix"
+import type { MaterialOptions, MaterialProps } from "./material"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   JscadOperation,
@@ -7,12 +8,19 @@ import type {
   Vector3D,
   Matrix4,
   RectangleOperation,
+  ApplyMaterialOperation,
 } from "./jscad-operations-types"
 
 export const jscadPlanner: JscadImplementation<
   JscadOperation,
   JscadOperation
 > & {
+  materials: {
+    applyMaterial: (
+      material: MaterialOptions,
+      shape: JscadOperation,
+    ) => ApplyMaterialOperation
+  }
   primitives: {
     rectangle: (options: Omit<RectangleOperation, "type">) => RectangleOperation
   }
@@ -20,6 +28,13 @@ export const jscadPlanner: JscadImplementation<
     transform: (matrix: Matrix4, shape: JscadOperation) => JscadOperation
   }
 } = {
+  materials: {
+    applyMaterial: (material, shape): ApplyMaterialOperation => ({
+      type: "applyMaterial",
+      material,
+      shape,
+    }),
+  },
   booleans: {
     intersect: (...shapes: JscadOperation[]): JscadOperation => ({
       type: "intersect",
@@ -60,48 +75,60 @@ export const jscadPlanner: JscadImplementation<
       ...options,
       type: "rectangle",
     }),
-    cube: (options?: {
-      size?: number | number[]
-      center?: Vector3D
-    }): JscadOperation => ({
+    cube: (
+      options?: MaterialProps & {
+        size?: number | number[]
+        center?: Vector3D
+      },
+    ): JscadOperation => ({
       type: "cube",
       ...options,
     }),
-    sphere: (options?: {
-      radius?: number
-      center?: Vector3D
-      resolution?: number
-    }): JscadOperation => ({
+    sphere: (
+      options?: MaterialProps & {
+        radius?: number
+        center?: Vector3D
+        resolution?: number
+      },
+    ): JscadOperation => ({
       type: "sphere",
       ...options,
     }),
-    cylinder: (options?: {
-      radius?: number
-      height?: number
-      center?: Vector3D
-      resolution?: number
-    }): JscadOperation => ({
+    cylinder: (
+      options?: MaterialProps & {
+        radius?: number
+        height?: number
+        center?: Vector3D
+        resolution?: number
+      },
+    ): JscadOperation => ({
       type: "cylinder",
       ...options,
     }),
-    polygon: (options: {
-      points: Vector2D[] | Vector2D[][]
-      paths?: number[] | number[][]
-    }): JscadOperation => ({
+    polygon: (
+      options: MaterialProps & {
+        points: Vector2D[] | Vector2D[][]
+        paths?: number[] | number[][]
+      },
+    ): JscadOperation => ({
       type: "polygon" as const,
       ...options,
     }),
-    cuboid: (options: {
-      size: [number, number, number]
-    }): JscadOperation => ({
+    cuboid: (
+      options: MaterialProps & {
+        size: [number, number, number]
+      },
+    ): JscadOperation => ({
       type: "cuboid",
       ...options,
     }),
-    roundedCuboid: (options: {
-      size: [number, number, number]
-      roundRadius: number
-      segments?: number
-    }): JscadOperation => ({
+    roundedCuboid: (
+      options: MaterialProps & {
+        size: [number, number, number]
+        roundRadius: number
+        segments?: number
+      },
+    ): JscadOperation => ({
       type: "roundedCuboid",
       ...options,
     }),
