@@ -15,6 +15,7 @@ export const jscadPlanner: JscadImplementation<
   JscadOperation,
   JscadOperation
 > & {
+  references: NonNullable<JscadImplementation<JscadOperation>["references"]>
   materials: {
     applyMaterial: (
       material: MaterialOptions,
@@ -28,6 +29,10 @@ export const jscadPlanner: JscadImplementation<
     transform: (matrix: Matrix4, shape: JscadOperation) => JscadOperation
   }
 } = {
+  references: {
+    name: (name, shape) => ({ type: "nameReference", name, shape }),
+    nameOutlines: (shape, names) => ({ type: "nameOutlines", names, shape }),
+  },
   materials: {
     applyMaterial: (material, shape): ApplyMaterialOperation => ({
       type: "applyMaterial",

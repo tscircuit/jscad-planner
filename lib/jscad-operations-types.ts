@@ -154,6 +154,8 @@ export interface ExtrudeLinearOperation extends OperationBase {
     height: number
     twistAngle?: number
     twistSteps?: number
+    topOutlineName?: string
+    bottomOutlineName?: string
   }
   shape: JscadOperation
 }
@@ -223,7 +225,21 @@ export interface RoundedCuboidOperation extends OperationBase {
   segments?: number
 }
 
+export interface NameReferenceOperation extends OperationBase {
+  type: "nameReference"
+  name: string
+  shape: JscadOperation
+}
+
+export interface NameOutlinesOperation extends OperationBase {
+  type: "nameOutlines"
+  names: { outer?: string; hole?: string }
+  shape: JscadOperation
+}
+
 export type JscadOperation =
+  | NameReferenceOperation
+  | NameOutlinesOperation
   | ApplyMaterialOperation
   | RectangleOperation
   | IntersectOperation

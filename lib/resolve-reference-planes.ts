@@ -183,6 +183,8 @@ export function resolveReferencePlanes(
         )
         return shape ? { ...operation, shape } : undefined
       }
+      case "nameReference":
+      case "nameOutlines":
       case "colorize": {
         const shape = visit(operation.shape, transforms, inProfile)
         return shape ? { ...operation, shape } : undefined
