@@ -193,3 +193,19 @@ Reference rectangles may also be represented by an axis-aligned four-corner
 used by the headless `jscad-fiber` compiler. Its local bounds center supplies the
 origin; the authored transform stack supplies normal and in-plane direction.
 Other reference shapes are rejected rather than assigning a guessed frame.
+
+## Native construction references
+
+Use `jscadPlanner.references.name(name, profile)` or
+`jscadPlanner.references.nameOutlines(profile, { outer: "outside", hole: "bore" })`
+to serialize native profile naming. `extrudeLinear` accepts `topOutlineName` and
+`bottomOutlineName` inside its options. Execute the JSON-roundtripped plan using
+`@tscircuit/jscad`, then call its `references.get(result, "top.bore")` to read a
+native path and its full placement matrix. No sampled edge schema is stored in
+the plan. Ambiguous output boundaries are rejected by the executing kernel.
+
+Reference operations and named caps require a reference-aware adapter; executing
+them with an older adapter throws explicitly. Ordinary plans remain compatible
+with existing adapters. Existing `reference: true` attachment rectangles retain
+their separate `resolveReferencePlanes` extraction behavior. These authored
+construction references do not claim persistent B-rep edge identity after CSG.

@@ -13,6 +13,13 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   materials?: {
     applyMaterial: (material: MaterialOptions, geometry: ShapeOrOp) => ShapeOrOp
   }
+  references?: {
+    name: (name: string, shape: ShapeOrOp) => ShapeOrOp
+    nameOutlines: (
+      shape: ShapeOrOp,
+      names: { outer?: string; hole?: string },
+    ) => ShapeOrOp
+  }
   booleans: {
     intersect: (...geometries: ShapeOrOp[]) => ShapeOrOp
     subtract: (...geometries: ShapeOrOp[]) => ShapeOrOp
@@ -80,6 +87,8 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
         height: number
         twistAngle?: number
         twistSteps?: number
+        topOutlineName?: string
+        bottomOutlineName?: string
       },
       geometry: ShapeOrOp,
     ) => ShapeOrOp
