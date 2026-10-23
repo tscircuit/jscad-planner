@@ -194,7 +194,9 @@ const evaluateOperation = <ShapeOrOp, MeasurementT>(
         operation.options
       return transformShape(operation.shape, (shape) =>
         jscad.extrusions.extrudeLinear(
-          jscad.references ? operation.options : geometryOptions,
+          jscad.references?.name || jscad.references?.nameOutlines
+            ? operation.options
+            : geometryOptions,
           shape,
         ),
       )

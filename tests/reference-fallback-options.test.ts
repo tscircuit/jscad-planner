@@ -34,14 +34,16 @@ test("legacy adapters receive geometry options without cap names after a JSON ro
       },
     },
   } as unknown as JscadImplementation<any, any>
-  const result = executeJscadOperations(adapter, plan)
   const expected = upstream.extrusions.extrudeLinear(
     options,
     upstream.primitives.rectangle({ size: [4, 6] }),
   )
-  expect(upstream.geometries.geom3.toPolygons(result)).toEqual(
-    upstream.geometries.geom3.toPolygons(expected),
-  )
-  expect(calls).toBe(1)
+  for (const references of [undefined, {}]) {
+    const result = executeJscadOperations({ ...adapter, references }, plan)
+    expect(upstream.geometries.geom3.toPolygons(result)).toEqual(
+      upstream.geometries.geom3.toPolygons(structuredClone(expected)),
+    )
+  }
+  expect(calls).toBe(2)
   expect(JSON.stringify(plan)).toBe(before)
 })
