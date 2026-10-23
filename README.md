@@ -204,8 +204,10 @@ to serialize native profile naming. `extrudeLinear` accepts `topOutlineName` and
 native path and its full placement matrix. No sampled edge schema is stored in
 the plan. Ambiguous output boundaries are rejected by the executing kernel.
 
-Reference operations and named caps require a reference-aware adapter; executing
-them with an older adapter throws explicitly. Ordinary plans remain compatible
-with existing adapters. Existing `reference: true` attachment rectangles retain
+Reference support is optional. An adapter without a naming method evaluates the
+wrapped shape and ignores that annotation. Adapters without a `references`
+namespace receive extrusion options without cap names and still produce the
+same solid. Reference-aware adapters retain names and report their normal
+validation errors. Existing `reference: true` attachment rectangles retain
 their separate `resolveReferencePlanes` extraction behavior. These authored
 construction references do not claim persistent B-rep edge identity after CSG.

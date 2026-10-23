@@ -15,7 +15,9 @@ export const jscadPlanner: JscadImplementation<
   JscadOperation,
   JscadOperation
 > & {
-  references: NonNullable<JscadImplementation<JscadOperation>["references"]>
+  references: Required<
+    NonNullable<JscadImplementation<JscadOperation>["references"]>
+  >
   materials: {
     applyMaterial: (
       material: MaterialOptions,

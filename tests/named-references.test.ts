@@ -41,12 +41,16 @@ test("reference operations survive JSON and execute using a compatible kernel", 
     10, 20, 22,
   ])
   expect(JSON.stringify(roundtrip)).toBe(before)
-  expect(() => executeJscadOperations<any, any>(rawAdapter, roundtrip)).toThrow(
-    "reference-aware",
+  const unnamed = executeJscadOperations<any, any>(rawAdapter, roundtrip)
+  expect(upstream.geometries.geom3.toPolygons(unnamed)).toEqual(
+    upstream.geometries.geom3.toPolygons(structuredClone(solid)),
   )
-  expect(() => executeJscadOperations<any, any>(rawAdapter, profile)).toThrow(
-    "does not support references",
-  )
+  expect(
+    upstream.measurements.measureArea(
+      executeJscadOperations<any, any>(rawAdapter, profile),
+    ),
+  ).toBeCloseTo(264)
+  expect(JSON.stringify(roundtrip)).toBe(before)
   const named = planner.references.name(
     "outline",
     planner.primitives.rectangle({ size: [2, 4] }),

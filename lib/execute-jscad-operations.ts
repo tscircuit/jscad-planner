@@ -78,18 +78,18 @@ const evaluateOperation = <ShapeOrOp, MeasurementT>(
   const { type, material, ...params } = operation
 
   switch (type) {
-    case "nameReference":
-    case "nameOutlines":
-      if (!jscad.references)
-        throw new Error(
-          "JSCAD adapter does not support references; use @tscircuit/jscad",
-        )
-      return type === "nameReference"
-        ? jscad.references.name(operation.name, recurse(operation.shape))
-        : jscad.references.nameOutlines(
-            recurse(operation.shape),
-            operation.names,
-          )
+    case "nameReference": {
+      const shape = recurse(operation.shape)
+      return jscad.references?.name
+        ? jscad.references.name(operation.name, shape)
+        : shape
+    }
+    case "nameOutlines": {
+      const shape = recurse(operation.shape)
+      return jscad.references?.nameOutlines
+        ? jscad.references.nameOutlines(shape, operation.names)
+        : shape
+    }
 
     case "applyMaterial": {
       if (
@@ -188,18 +188,17 @@ const evaluateOperation = <ShapeOrOp, MeasurementT>(
       return transformShape(operation.shape, (shape) =>
         jscad.transforms.translate(operation.vector, shape),
       )
-    case "extrudeLinear":
-      if (
-        (operation.options.topOutlineName !== undefined ||
-          operation.options.bottomOutlineName !== undefined) &&
-        !jscad.references
-      )
-        throw new Error(
-          "Named extrusion outlines require a reference-aware JSCAD adapter; use @tscircuit/jscad",
-        )
+    case "extrudeLinear": {
+      // Older adapters may validate options strictly; omit unsupported names.
+      const { topOutlineName, bottomOutlineName, ...geometryOptions } =
+        operation.options
       return transformShape(operation.shape, (shape) =>
-        jscad.extrusions.extrudeLinear(operation.options, shape),
+        jscad.extrusions.extrudeLinear(
+          jscad.references ? operation.options : geometryOptions,
+          shape,
+        ),
       )
+    }
     case "extrudeRotate":
       return transformShape(operation.shape, (shape) =>
         jscad.extrusions.extrudeRotate(operation.options, shape),
