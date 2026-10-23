@@ -13,9 +13,10 @@ export interface JscadImplementation<ShapeOrOp = any, MeasurementT = number> {
   materials?: {
     applyMaterial: (material: MaterialOptions, geometry: ShapeOrOp) => ShapeOrOp
   }
+  /** Optional naming capabilities. Missing methods leave the geometry unchanged. */
   references?: {
-    name: (name: string, shape: ShapeOrOp) => ShapeOrOp
-    nameOutlines: (
+    name?: (name: string, shape: ShapeOrOp) => ShapeOrOp
+    nameOutlines?: (
       shape: ShapeOrOp,
       names: { outer?: string; hole?: string },
     ) => ShapeOrOp
