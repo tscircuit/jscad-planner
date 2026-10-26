@@ -1,6 +1,6 @@
-import { expect, it, describe } from "bun:test"
-import { jscadPlanner } from "../lib/jscad-planner.ts"
+import { describe, expect, it } from "bun:test"
 import { executeJscadOperations } from "../lib/execute-jscad-operations.ts"
+import { jscadPlanner } from "../lib/jscad-planner.ts"
 
 describe("jscad-planner", () => {
   it("should be able to create operations, then execute the operations against the jscad planner", () => {

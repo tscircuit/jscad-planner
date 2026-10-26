@@ -2,8 +2,8 @@ import { assertTransformMatrix } from "./assert-transform-matrix"
 import type { MaterialOptions, MaterialProps } from "./material"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
-  JscadOperation,
   Color,
+  JscadOperation,
   Vector2D,
   Vector3D,
   Matrix4,
