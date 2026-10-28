@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="350" viewBox="0 0 1000 350">
+<rect width="1000" height="350" fill="white"/>
+<g font-family="sans-serif" text-anchor="middle" fill="#0f172a">
+<text x="250" y="35" font-size="22">Combined with union</text>
+<text x="750" y="35" font-size="22">Same shapes executed separately</text>
+<text x="500" y="325" font-size="16">Gray = missing colour metadata. Expected: both shapes keep their blue / red colours.</text>
+</g>
+<polygon points="180.000,126.000 180.000,72.000 68.000,128.000 68.000,182.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="180.000,72.000 180.000,126.000 292.000,182.000 292.000,128.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="180.000,238.000 292.000,182.000 180.000,126.000 68.000,182.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="68.000,128.000 180.000,72.000 292.000,128.000 180.000,184.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="292.000,182.000 180.000,238.000 180.000,184.000 292.000,128.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="180.000,184.000 180.000,238.000 68.000,182.000 68.000,128.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="320.000,142.000 320.000,196.000 432.000,252.000 432.000,198.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="320.000,196.000 320.000,142.000 208.000,198.000 208.000,252.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="320.000,308.000 432.000,252.000 320.000,196.000 208.000,252.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="208.000,198.000 320.000,142.000 432.000,198.000 320.000,254.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="320.000,254.000 320.000,308.000 208.000,252.000 208.000,198.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="432.000,252.000 320.000,308.000 320.000,254.000 432.000,198.000" fill="#b8bdc4" stroke="#334155" stroke-width="0.8"/>
+<polygon points="680.000,126.000 680.000,72.000 568.000,128.000 568.000,182.000" fill="rgb(0,107,255)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="680.000,126.000 792.000,182.000 792.000,128.000 680.000,72.000" fill="rgb(0,107,255)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="680.000,126.000 568.000,182.000 680.000,238.000 792.000,182.000" fill="rgb(0,107,255)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="680.000,72.000 792.000,128.000 680.000,184.000 568.000,128.000" fill="rgb(0,107,255)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="792.000,182.000 680.000,238.000 680.000,184.000 792.000,128.000" fill="rgb(0,107,255)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="568.000,182.000 568.000,128.000 680.000,184.000 680.000,238.000" fill="rgb(0,107,255)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="820.000,196.000 820.000,142.000 708.000,198.000 708.000,252.000" fill="rgb(255,51,33)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="820.000,196.000 932.000,252.000 932.000,198.000 820.000,142.000" fill="rgb(255,51,33)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="820.000,196.000 708.000,252.000 820.000,308.000 932.000,252.000" fill="rgb(255,51,33)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="820.000,142.000 932.000,198.000 820.000,254.000 708.000,198.000" fill="rgb(255,51,33)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="932.000,252.000 820.000,308.000 820.000,254.000 932.000,198.000" fill="rgb(255,51,33)" stroke="#334155" stroke-width="0.8"/>
+<polygon points="708.000,252.000 708.000,198.000 820.000,254.000 820.000,308.000" fill="rgb(255,51,33)" stroke="#334155" stroke-width="0.8"/>
+</svg>
