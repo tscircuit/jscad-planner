@@ -1,6 +1,10 @@
 import { resolveReferencePlanes } from "./resolve-reference-planes"
 import { assertTransformMatrix } from "./assert-transform-matrix"
 import { materials, preserveMaterial } from "./material"
+import {
+  bakeTransformsWithPolygonColors,
+  preserveBooleanColors,
+} from "./preserve-boolean-colors"
 import type { JscadImplementation } from "./jscad-implementation-types"
 import type {
   CubeOperation,
@@ -58,13 +62,25 @@ const evaluateOperation = <ShapeOrOp, MeasurementT>(
     transform: (shape: ShapeOrOp) => ShapeOrOp,
   ) => {
     const shape = recurse(operation)
-    return preserveMaterial(shape, transform(shape))
+    const transformed =
+      operation.type === "createGeom3"
+        ? transform(shape)
+        : bakeTransformsWithPolygonColors(shape, transform(shape))
+    return preserveMaterial(shape, transformed)
   }
   const combineShapes = (
     shapes: JscadOperation[],
     combine: (...shapes: ShapeOrOp[]) => ShapeOrOp,
+    preserveColors = false,
   ) => {
-    const result = combine(...shapes.map(recurse))
+    const evaluatedShapes = shapes.map(recurse)
+    const combined = combine(...evaluatedShapes)
+    const result = preserveColors
+      ? preserveBooleanColors({
+          shapes: evaluatedShapes,
+          result: combined,
+        })
+      : combined
     // An adapter may copy metadata from its first operand. A combined solid
     // must use the operation's explicit material, not an arbitrary operand's.
     if (result && typeof result === "object" && "material" in result) {
@@ -116,19 +132,27 @@ const evaluateOperation = <ShapeOrOp, MeasurementT>(
         center: operation.center ?? [0, 0],
       })
     case "intersect":
-      return combineShapes(operation.shapes, (...shapes) =>
-        jscad.booleans.intersect(...shapes),
+      return combineShapes(
+        operation.shapes,
+        (...shapes) => jscad.booleans.intersect(...shapes),
+        true,
       )
     case "subtract": {
       const shapes = operation.shapes.map(recurse)
       return preserveMaterial(
         shapes[0] ?? {},
-        jscad.booleans.subtract(...shapes),
+        preserveBooleanColors({
+          shapes,
+          result: jscad.booleans.subtract(...shapes),
+          invertToolNormals: true,
+        }),
       )
     }
     case "union":
-      return combineShapes(operation.shapes, (...shapes) =>
-        jscad.booleans.union(...shapes),
+      return combineShapes(
+        operation.shapes,
+        (...shapes) => jscad.booleans.union(...shapes),
+        true,
       )
     case "hull":
       return combineShapes(operation.shapes, (...shapes) =>
