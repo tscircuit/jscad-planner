@@ -220,7 +220,9 @@ export function resolveReferencePlanes(
           (shape): shape is JscadOperation => shape !== undefined,
         )
         if (!shapes.length) return undefined
-        if (shapes.length === 1) return preserveMaterial(operation, shapes[0])
+        // A single concave shape still needs its convex hull computed.
+        if (shapes.length === 1 && operation.type !== "hull")
+          return preserveMaterial(operation, shapes[0])
         return { ...operation, shapes }
       }
       default:
