@@ -37,9 +37,11 @@ function transformMatrix(operation: JscadOperation): Matrix4 {
       return toTransformMatrix(mat4.fromScaling(result, operation.factors))
     case "rotate": {
       // JSCAD rotate([x,y,z]) applies X, then Y, then Z: Rz * Ry * Rx.
-      mat4.rotateZ(result, result, operation.angles[2])
-      mat4.rotateY(result, result, operation.angles[1])
-      mat4.rotateX(result, result, operation.angles[0])
+      const angles = operation.angles.slice()
+      while (angles.length < 3) angles.push(0)
+      mat4.rotateZ(result, result, angles[2])
+      mat4.rotateY(result, result, angles[1])
+      mat4.rotateX(result, result, angles[0])
       return result
     }
     case "rotateX":
